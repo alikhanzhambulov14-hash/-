@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filesunnut" : "sunnut.png",
+      "filename" : "sunnut.png",
       "scale" : "1x"
     }
   ],

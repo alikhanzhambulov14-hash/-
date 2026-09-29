@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filepeanut" : "peanut.png",
+      "filename" : "peanut.png",
       "scale" : "1x"
     }
   ],

@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "fileicenut" : "icenut.png",
+      "filename" : "icenut.png",
       "scale" : "1x"
     }
   ],

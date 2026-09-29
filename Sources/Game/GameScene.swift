@@ -4,6 +4,7 @@ import SpriteKit
 
 enum PlantType: String, CaseIterable {
     case sunflower, peashooter, wallnut, snowpea, cherrybomb
+    case potatomine, chomper, puffshroom, torchwood, tallnut, squash, repeater
     var textureName: String {
         switch self {
         case .sunflower: return "sunflower"
@@ -11,6 +12,13 @@ enum PlantType: String, CaseIterable {
         case .wallnut: return "wallnut"
         case .snowpea: return "snowpea"
         case .cherrybomb: return "cherrybomb"
+        case .potatomine: return "potatomine"
+        case .chomper: return "chomper"
+        case .puffshroom: return "puffshroom"
+        case .torchwood: return "torchwood"
+        case .tallnut: return "tallnut"
+        case .squash: return "squash"
+        case .repeater: return "repeater"
         }
     }
     var cost: Int {
@@ -20,11 +28,19 @@ enum PlantType: String, CaseIterable {
         case .wallnut: return 50
         case .snowpea: return 175
         case .cherrybomb: return 150
+        case .potatomine: return 25
+        case .chomper: return 150
+        case .puffshroom: return 0
+        case .torchwood: return 175
+        case .tallnut: return 125
+        case .squash: return 50
+        case .repeater: return 200
         }
     }
     var hp: Int {
         switch self {
         case .wallnut: return 4000
+        case .tallnut: return 8000
         default: return 300
         }
     }
@@ -37,6 +53,9 @@ enum FusionType: String {
     case peaNut       // peashooter + wallnut
     case iceNut       // snowpea + wallnut
     case gatlingPea   // cherrybomb + peashooter
+    case bigChomper   // chomper + chomper (or wallnut)
+    case allPeater    // repeater + snowpea + peashooter
+    case winterMelon  // melon + snowpea
 
     var textureName: String {
         switch self {
@@ -46,6 +65,9 @@ enum FusionType: String {
         case .peaNut: return "peanut"
         case .iceNut: return "icenut"
         case .gatlingPea: return "gatlingpea"
+        case .bigChomper: return "bigchomper"
+        case .allPeater: return "allpeater"
+        case .winterMelon: return "wintermelon"
         }
     }
     var hp: Int {
@@ -63,6 +85,8 @@ enum FusionType: String {
         if pair == [.peashooter, .wallnut] { return .peaNut }
         if pair == [.snowpea, .wallnut] { return .iceNut }
         if pair == [.cherrybomb, .peashooter] { return .gatlingPea }
+        if pair == [.chomper, .wallnut] { return .bigChomper }
+        if pair == [.repeater, .snowpea] { return .allPeater }
         return nil
     }
 }
@@ -245,7 +269,7 @@ class GameScene: SKScene {
 
     func setupPlantBar() {
         let barY: CGFloat = size.height - 50
-        let types: [PlantType] = [.sunflower, .peashooter, .wallnut, .snowpea, .cherrybomb]
+        let types = PlantType.allCases
         let startX: CGFloat = 200
 
         for (i, pt) in types.enumerated() {
