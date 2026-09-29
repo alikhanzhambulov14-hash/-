@@ -12,98 +12,62 @@ class MenuViewController: UIViewController {
     }
 
     private func setupUI() {
-        // Background gradient layer
-        let gradient = CAGradientLayer()
-        gradient.colors = [
-            UIColor(red: 0.05, green: 0.2, blue: 0.1, alpha: 1).cgColor,
-            UIColor(red: 0.15, green: 0.35, blue: 0.12, alpha: 1).cgColor,
-            UIColor(red: 0.08, green: 0.22, blue: 0.08, alpha: 1).cgColor
-        ]
-        gradient.frame = UIScreen.main.bounds
-        view.layer.insertSublayer(gradient, at: 0)
+        // Original Menu Background
+        let bgImageView = UIImageView(image: UIImage(named: "menu_bg"))
+        bgImageView.contentMode = .scaleAspectFill
+        bgImageView.frame = UIScreen.main.bounds
+        bgImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(bgImageView)
 
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 20
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stack)
+        // Version Label
+        let versionLabel = UILabel()
+        versionLabel.text = "PvZ Fusion iOS v3.9"
+        versionLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        versionLabel.textColor = .white
+        versionLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(versionLabel)
+        
         NSLayoutConstraint.activate([
-            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            versionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            versionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
 
-        // Title
-        let titleLabel = UILabel()
-        titleLabel.numberOfLines = 0
-        titleLabel.textAlignment = .center
-        let titleText = NSMutableAttributedString()
-        titleText.append(NSAttributedString(string: "Plants ", attributes: [
-            .font: UIFont.systemFont(ofSize: 48, weight: .black),
-            .foregroundColor: UIColor.systemGreen
-        ]))
-        titleText.append(NSAttributedString(string: "vs ", attributes: [
-            .font: UIFont.systemFont(ofSize: 36, weight: .medium),
-            .foregroundColor: UIColor.white.withAlphaComponent(0.8)
-        ]))
-        titleText.append(NSAttributedString(string: "Zombies", attributes: [
-            .font: UIFont.systemFont(ofSize: 48, weight: .black),
-            .foregroundColor: UIColor.systemBrown
-        ]))
-        titleLabel.attributedText = titleText
-        stack.addArrangedSubview(titleLabel)
-
-        let fusionLabel = UILabel()
-        fusionLabel.text = "⚡ FUSION ⚡"
-        fusionLabel.font = UIFont.systemFont(ofSize: 40, weight: .black)
-        fusionLabel.textColor = UIColor.systemYellow
-        fusionLabel.textAlignment = .center
-        stack.addArrangedSubview(fusionLabel)
-
-        let versionLabel = UILabel()
-        versionLabel.text = "v3.9"
-        versionLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        versionLabel.textColor = UIColor.white.withAlphaComponent(0.5)
-        stack.addArrangedSubview(versionLabel)
-
-        let spacer = UIView()
-        spacer.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        stack.addArrangedSubview(spacer)
-
-        // Play button
-        let playBtn = makeButton(title: "▶  ИГРАТЬ", color: UIColor.systemGreen, big: true)
-        playBtn.addTarget(self, action: #selector(playTapped), for: .touchUpInside)
-        stack.addArrangedSubview(playBtn)
-
-        // Almanac button
-        let almanacBtn = makeButton(title: "📖  Альманах Слияний", color: UIColor.systemOrange, big: false)
-        almanacBtn.addTarget(self, action: #selector(almanacTapped), for: .touchUpInside)
-        stack.addArrangedSubview(almanacBtn)
-
-        // Animate title
-        animatePulse(fusionLabel)
-    }
-
-    private func makeButton(title: String, color: UIColor, big: Bool) -> UIButton {
-        let btn = UIButton(type: .system)
-        btn.setTitle(title, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: big ? 28 : 20, weight: .bold)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = color
-        btn.layer.cornerRadius = big ? 18 : 14
-        btn.layer.shadowColor = UIColor.black.cgColor
-        btn.layer.shadowOffset = CGSize(width: 0, height: 4)
-        btn.layer.shadowOpacity = 0.4
-        btn.layer.shadowRadius = 6
-        btn.contentEdgeInsets = UIEdgeInsets(top: big ? 16 : 12, left: 40, bottom: big ? 16 : 12, right: 40)
-        btn.widthAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
-        return btn
-    }
-
-    private func animatePulse(_ view: UIView) {
-        UIView.animate(withDuration: 1.2, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction]) {
-            view.transform = CGAffineTransform(scaleX: 1.08, y: 1.08)
+        // Adventure Button
+        let advBtn = UIButton(type: .custom)
+        advBtn.setImage(UIImage(named: "menu_adventure"), for: .normal)
+        advBtn.addTarget(self, action: #selector(playTapped), for: .touchUpInside)
+        advBtn.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(advBtn)
+        
+        NSLayoutConstraint.activate([
+            advBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 180),
+            advBtn.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
+            advBtn.widthAnchor.constraint(equalToConstant: 330),
+            advBtn.heightAnchor.constraint(equalToConstant: 120)
+        ])
+        
+        // Hover/pulse effect on adventure button
+        UIView.animate(withDuration: 1.5, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction]) {
+            advBtn.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
         }
+
+        // Almanac button (temp text button until we extract almanac sprite)
+        let almanacBtn = UIButton(type: .system)
+        almanacBtn.setTitle("Альманах Слияний", for: .normal)
+        almanacBtn.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        almanacBtn.setTitleColor(.white, for: .normal)
+        almanacBtn.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        almanacBtn.layer.cornerRadius = 10
+        almanacBtn.addTarget(self, action: #selector(almanacTapped), for: .touchUpInside)
+        almanacBtn.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(almanacBtn)
+        
+        NSLayoutConstraint.activate([
+            almanacBtn.centerXAnchor.constraint(equalTo: advBtn.centerXAnchor),
+            almanacBtn.topAnchor.constraint(equalTo: advBtn.bottomAnchor, constant: 20),
+            almanacBtn.widthAnchor.constraint(equalToConstant: 250),
+            almanacBtn.heightAnchor.constraint(equalToConstant: 45)
+        ])
     }
 
     @objc private func playTapped() {
