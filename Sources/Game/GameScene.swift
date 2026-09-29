@@ -246,24 +246,33 @@ class GameScene: SKScene {
     }
 
     func setupHUD() {
+        let seedBankBg = SKSpriteNode(imageNamed: "seedbank")
+        seedBankBg.anchorPoint = CGPoint(x: 0, y: 1)
+        seedBankBg.position = CGPoint(x: 0, y: size.height)
+        seedBankBg.zPosition = 80
+        seedBankBg.setScale(0.8)
+        addChild(seedBankBg)
+
         // Sun counter
         let sunIcon = SKSpriteNode(imageNamed: "sun")
-        sunIcon.position = CGPoint(x: 50, y: size.height - 40)
-        sunIcon.setScale(0.8)
+        sunIcon.position = CGPoint(x: 50, y: size.height - 45)
+        sunIcon.setScale(0.7)
         sunIcon.zPosition = 100
         addChild(sunIcon)
 
         sunLabel = SKLabelNode(text: "\(sun)")
         sunLabel.fontName = "Helvetica-Bold"
-        sunLabel.fontSize = 28
+        sunLabel.fontSize = 24
         sunLabel.fontColor = .black
-        sunLabel.position = CGPoint(x: 100, y: size.height - 50)
+        sunLabel.position = CGPoint(x: 50, y: size.height - 85)
         sunLabel.zPosition = 100
         addChild(sunLabel)
 
-        let quitBtn = SKLabelNode(text: "✖️")
-        quitBtn.fontSize = 30
-        quitBtn.position = CGPoint(x: size.width - 50, y: size.height - 50)
+        let quitBtn = SKLabelNode(text: "Menu")
+        quitBtn.fontName = "Helvetica-Bold"
+        quitBtn.fontSize = 24
+        quitBtn.fontColor = .white
+        quitBtn.position = CGPoint(x: size.width - 60, y: size.height - 40)
         quitBtn.zPosition = 100
         quitBtn.name = "quit"
         addChild(quitBtn)
