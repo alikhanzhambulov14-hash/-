@@ -5,6 +5,8 @@ class GameViewController: UIViewController {
     override var prefersStatusBarHidden: Bool { true }
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .landscape }
 
+    var selectedSeeds: [PlantType] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let skView = SKView(frame: view.bounds)
@@ -15,6 +17,9 @@ class GameViewController: UIViewController {
         let scene = GameScene(size: CGSize(width: 1194, height: 834))
         scene.scaleMode = .aspectFill
         scene.gameVC = self
+        if !selectedSeeds.isEmpty {
+            scene.selectedSeeds = selectedSeeds
+        }
         skView.presentScene(scene)
     }
 

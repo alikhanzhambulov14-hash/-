@@ -198,6 +198,18 @@ class SunDrop {
     }
 }
 
+class MowerEntity {
+    var row: Int
+    var node: SKNode
+    var isActive = false
+    var isDead = false
+
+    init(row: Int, node: SKNode) {
+        self.row = row
+        self.node = node
+    }
+}
+
 // MARK: - Game Scene
 
 class GameScene: SKScene {
@@ -213,10 +225,13 @@ class GameScene: SKScene {
     var zombies: [ZombieEntity] = []
     var projectiles: [Projectile] = []
     var sunDrops: [SunDrop] = []
+    var mowers: [MowerEntity] = []
     var selectedPlant: PlantType? = nil
     var isShovelSelected = false
     var shovelIcon: SKSpriteNode?
     var shovelBank: SKSpriteNode?
+    
+    var selectedSeeds: [PlantType] = PlantType.allCases
     
     var sunLabel: SKLabelNode!
     var plantButtons: [SKNode] = []
@@ -224,12 +239,32 @@ class GameScene: SKScene {
     weak var gameVC: GameViewController?
     var isGamePaused = false
     
+    var totalZombiesToSpawn = 0
+    var zombiesSpawned = 0
+    var isLevelComplete = false
+    
     override func didMove(to view: SKView) {
+        totalZombiesToSpawn = LevelManager.shared.getZombieCountForCurrentLevel()
+        
         plants = Array(repeating: Array(repeating: nil, count: cols), count: rows)
         setupBackground()
         setupHUD()
         setupPlantBar()
+        setupMowers()
         startSpawning()
+    }
+    
+    func setupMowers() {
+        for row in 0..<rows {
+            let mower = SKSpriteNode(imageNamed: "mower")
+            mower.setScale(0.7)
+            let my = gridOffsetY + CGFloat(row) * cellH + cellH / 2
+            let mx = gridOffsetX - 80
+            mower.position = CGPoint(x: mx, y: my)
+            mower.zPosition = 50
+            addChild(mower)
+            mowers.append(MowerEntity(row: row, node: mower))
+        }
     }
 
     func setupBackground() {
@@ -295,8 +330,8 @@ class GameScene: SKScene {
     }
 
     func setupPlantBar() {
-        let types = PlantType.allCases
-        let startX: CGFloat = 180
+        let types = selectedSeeds
+        let startX: CGFloat = 130
         
         for (i, pt) in types.enumerated() {
             let row = i / 7
@@ -499,14 +534,37 @@ class GameScene: SKScene {
     }
 
     func startSpawning() {
-        run(SKAction.repeatForever(SKAction.sequence([
-            SKAction.wait(forDuration: 4.0),
-            SKAction.run { [weak self] in self?.spawnZombie() }
-        ])))
+        var waveActions: [SKAction] = []
+        var remaining = totalZombiesToSpawn
+        var waveDelay = 15.0
+        
+        while remaining > 0 {
+            let toSpawn = min(remaining, Int.random(in: 2...5))
+            remaining -= toSpawn
+            waveActions.append(SKAction.wait(forDuration: waveDelay))
+            waveActions.append(SKAction.run { [weak self] in self?.spawnWave(count: toSpawn) })
+            waveDelay = 20.0
+        }
+        
+        run(SKAction.sequence(waveActions))
+        
         run(SKAction.repeatForever(SKAction.sequence([
             SKAction.wait(forDuration: 6.0),
             SKAction.run { [weak self] in self?.spawnSkySun() }
         ])))
+    }
+
+    func spawnWave(count: Int) {
+        for _ in 0..<count {
+            if zombiesSpawned >= totalZombiesToSpawn { break }
+            zombiesSpawned += 1
+            
+            let delay = Double.random(in: 0...5)
+            run(SKAction.sequence([
+                SKAction.wait(forDuration: delay),
+                SKAction.run { [weak self] in self?.spawnZombie() }
+            ]))
+        }
     }
 
     func spawnZombie() {
@@ -552,10 +610,41 @@ class GameScene: SKScene {
         }
 
         // Zombies
-        for z in zombies {
-            z.node.position.x -= z.speed * dt
+        for z in Array(zombies) where !z.isDead {
+            // Mower collision
+            if let mower = mowers.first(where: { $0.row == z.row && !$0.isDead }) {
+                if !mower.isActive && z.node.position.x < mower.node.position.x + 30 {
+                    mower.isActive = true
+                }
+                
+                if mower.isActive && abs(mower.node.position.x - z.node.position.x) < 40 {
+                    z.isDead = true
+                    z.node.run(SKAction.sequence([
+                        SKAction.fadeOut(withDuration: 0.5),
+                        SKAction.removeFromParent()
+                    ]))
+                }
+            }
+
+            var collided = false
+            let cx = Int((z.node.position.x - gridOffsetX) / cellW)
+            if cx >= 0 && cx < cols {
+                if let plant = plants[z.row][cx] {
+                    collided = true
+                    plant.hp -= 1 // Simplified eating, assuming 60 ticks per sec
+                    if plant.hp <= 0 {
+                        plant.node.removeFromParent()
+                        plants[z.row][cx] = nil
+                    }
+                }
+            }
+            
+            if !collided {
+                z.node.position.x -= z.speed * dt
+            }
+
             if z.node.position.x < 50 {
-                // Game Over logic here
+                gameOver()
             }
         }
 
@@ -581,12 +670,66 @@ class GameScene: SKScene {
         }
 
         zombies.removeAll { z in
-            if z.hp <= 0 {
+            if z.hp <= 0 || z.isDead {
                 z.node.removeFromParent()
                 return true
             }
             return false
         }
+        
+        // Mower Movement
+        for m in mowers where m.isActive && !m.isDead {
+            m.node.position.x += dt * 300
+            if m.node.position.x > size.width + 100 {
+                m.isDead = true
+                m.node.removeFromParent()
+            }
+        }
+        
+        mowers.removeAll { $0.isDead }
+        
+        if zombiesSpawned >= totalZombiesToSpawn && zombies.isEmpty && !isLevelComplete {
+            isLevelComplete = true
+            levelComplete()
+        }
+    }
+    
+    func gameOver() {
+        if isGamePaused { return }
+        isGamePaused = true
+        
+        let label = SKLabelNode(text: "THE ZOMBIES ATE YOUR BRAINS!")
+        label.fontName = "Helvetica-Bold"
+        label.fontSize = 40
+        label.fontColor = .red
+        label.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        label.zPosition = 1000
+        addChild(label)
+        
+        run(SKAction.sequence([
+            SKAction.wait(forDuration: 3.0),
+            SKAction.run { [weak self] in self?.gameVC?.returnToMenu() }
+        ]))
+    }
+    
+    func levelComplete() {
+        if isGamePaused { return }
+        isGamePaused = true
+        
+        let label = SKLabelNode(text: "LEVEL COMPLETE!")
+        label.fontName = "Helvetica-Bold"
+        label.fontSize = 50
+        label.fontColor = .yellow
+        label.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        label.zPosition = 1000
+        addChild(label)
+        
+        LevelManager.shared.completeLevel()
+        
+        run(SKAction.sequence([
+            SKAction.wait(forDuration: 3.0),
+            SKAction.run { [weak self] in self?.gameVC?.returnToMenu() }
+        ]))
     }
 
     func shootPea(from plant: PlantEntity) {

@@ -62,10 +62,10 @@ class MenuViewController: UIViewController {
     }
 
     @objc private func playTapped() {
-        let gameVC = GameViewController()
-        gameVC.modalPresentationStyle = .fullScreen
-        gameVC.modalTransitionStyle = .crossDissolve
-        present(gameVC, animated: true)
+        let chooserVC = SeedChooserViewController()
+        chooserVC.modalPresentationStyle = .fullScreen
+        chooserVC.modalTransitionStyle = .crossDissolve
+        present(chooserVC, animated: true)
     }
 
     @objc private func notImplemented() {
