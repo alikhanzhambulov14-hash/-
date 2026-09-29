@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filezombie" : "zombie.png",
+      "filename" : "zombie.png",
       "scale" : "1x"
     }
   ],

@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filepeashooter" : "peashooter.png",
+      "filename" : "peashooter.png",
       "scale" : "1x"
     }
   ],

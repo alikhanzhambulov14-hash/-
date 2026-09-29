@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filemenu_adventure" : "menu_adventure.png",
+      "filename" : "menu_adventure.png",
       "scale" : "1x"
     }
   ],

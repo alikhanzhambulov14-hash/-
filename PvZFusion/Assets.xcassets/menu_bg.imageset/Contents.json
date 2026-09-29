@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filemenu_bg" : "menu_bg.png",
+      "filename" : "menu_bg.png",
       "scale" : "1x"
     }
   ],

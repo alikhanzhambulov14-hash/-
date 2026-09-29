@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filesun" : "sun.png",
+      "filename" : "sun.png",
       "scale" : "1x"
     }
   ],

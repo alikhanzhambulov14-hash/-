@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filesunflower" : "sunflower.png",
+      "filename" : "sunflower.png",
       "scale" : "1x"
     }
   ],

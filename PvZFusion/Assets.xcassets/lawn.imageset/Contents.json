@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filelawn" : "lawn.png",
+      "filename" : "lawn.png",
       "scale" : "1x"
     }
   ],

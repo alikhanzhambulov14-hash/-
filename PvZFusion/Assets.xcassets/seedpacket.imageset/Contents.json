@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "fileseedpacket" : "seedpacket.png",
+      "filename" : "seedpacket.png",
       "scale" : "1x"
     }
   ],
