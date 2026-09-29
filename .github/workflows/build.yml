@@ -19,6 +19,7 @@ jobs:
 
       - name: Build
         run: |
+          sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
           xcodebuild \
             -project PvZFusion.xcodeproj \
             -scheme PvZFusion \
