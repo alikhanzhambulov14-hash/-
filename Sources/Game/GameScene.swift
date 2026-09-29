@@ -242,7 +242,7 @@ class GameScene: SKScene {
     var nextSpawnTime: TimeInterval = 8
     var gameOver = false
     var gameWon = false
-    var isPaused = false
+    var isGamePaused = false
     var naturalSunTimer: TimeInterval = 0
 
     // UI nodes
@@ -425,8 +425,8 @@ class GameScene: SKScene {
         let tapped = nodes(at: loc)
         for n in tapped {
             if n.name == "pause" {
-                isPaused.toggle()
-                self.scene?.isPaused = isPaused
+                isGamePaused.toggle()
+                self.scene?.isPaused = isGamePaused
                 return
             }
             if n.name == "quit" {
@@ -435,7 +435,7 @@ class GameScene: SKScene {
             }
         }
 
-        if isPaused { return }
+        if isGamePaused { return }
 
         // Check sun drops
         for sun in sunDrops where !sun.collected {
@@ -727,7 +727,7 @@ class GameScene: SKScene {
     // MARK: - Update Loop
 
     override func update(_ currentTime: TimeInterval) {
-        if gameOver || gameWon || isPaused { return }
+        if gameOver || gameWon || isGamePaused { return }
 
         let dt: TimeInterval = 1.0 / 60.0
 
