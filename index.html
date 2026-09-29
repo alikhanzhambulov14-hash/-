@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PvZ Fusion">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <title>PvZ Fusion 3.9</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Main Menu -->
+    <div id="menu-screen" class="screen active">
+      <div class="menu-bg"></div>
+      <div class="menu-content">
+        <h1 class="game-title">
+          <span class="title-plants">Plants</span>
+          <span class="title-vs">vs</span>
+          <span class="title-zombies">Zombies</span>
+          <div class="title-fusion">⚡ FUSION ⚡</div>
+          <div class="title-version">3.9</div>
+        </h1>
+        <button id="btn-play" class="menu-btn play-btn">▶ ИГРАТЬ</button>
+        <button id="btn-almanac" class="menu-btn">📖 Альманах</button>
+        <button id="btn-how" class="menu-btn">❓ Как играть</button>
+      </div>
+    </div>
+
+    <!-- How To Play -->
+    <div id="how-screen" class="screen">
+      <div class="overlay-panel">
+        <h2>Как играть</h2>
+        <div class="how-grid">
+          <div class="how-item">
+            <div class="how-icon">☀️</div>
+            <p>Собирай солнце, нажимая на него</p>
+          </div>
+          <div class="how-item">
+            <div class="how-icon">🌱</div>
+            <p>Выбери растение снизу и нажми на клетку поля</p>
+          </div>
+          <div class="how-item">
+            <div class="how-icon">⚡</div>
+            <p><b>FUSION:</b> Поставь два растения на одну клетку, чтобы создать гибрид!</p>
+          </div>
+          <div class="how-item">
+            <div class="how-icon">🧟</div>
+            <p>Зомби идут справа. Не дай им дойти до дома!</p>
+          </div>
+        </div>
+        <button id="btn-how-back" class="menu-btn">← Назад</button>
+      </div>
+    </div>
+
+    <!-- Almanac -->
+    <div id="almanac-screen" class="screen">
+      <div class="overlay-panel almanac-panel">
+        <h2>📖 Альманах слияний</h2>
+        <div id="almanac-list" class="almanac-list"></div>
+        <button id="btn-almanac-back" class="menu-btn">← Назад</button>
+      </div>
+    </div>
+
+    <!-- Level Select -->
+    <div id="level-screen" class="screen">
+      <div class="overlay-panel">
+        <h2>Выбери уровень</h2>
+        <div class="level-grid" id="level-grid"></div>
+        <button id="btn-level-back" class="menu-btn">← Назад</button>
+      </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+      <canvas id="game-canvas"></canvas>
+      <div id="game-hud">
+        <div id="sun-counter">
+          <span class="sun-icon">☀️</span>
+          <span id="sun-amount">50</span>
+        </div>
+        <div id="wave-info">
+          <span id="wave-text">Волна 1</span>
+        </div>
+        <button id="btn-pause" class="hud-btn">⏸</button>
+      </div>
+      <div id="plant-bar"></div>
+      <div id="fusion-hint" class="hidden">
+        <span>⚡ FUSION! Поставь на существующее растение для слияния!</span>
+      </div>
+    </div>
+
+    <!-- Pause Overlay -->
+    <div id="pause-overlay" class="screen">
+      <div class="overlay-panel">
+        <h2>⏸ Пауза</h2>
+        <button id="btn-resume" class="menu-btn play-btn">▶ Продолжить</button>
+        <button id="btn-quit" class="menu-btn">🏠 В меню</button>
+      </div>
+    </div>
+
+    <!-- Win/Lose -->
+    <div id="result-overlay" class="screen">
+      <div class="overlay-panel">
+        <h2 id="result-title"></h2>
+        <p id="result-text"></p>
+        <button id="btn-result-menu" class="menu-btn">🏠 В меню</button>
+        <button id="btn-result-retry" class="menu-btn play-btn">🔄 Ещё раз</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>

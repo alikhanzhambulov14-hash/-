@@ -1,0 +1,34 @@
+name: PvZFusion
+options:
+  bundleIdPrefix: com.pvzfusion
+  deploymentTarget:
+    iOS: "15.0"
+  xcodeVersion: "15.4"
+  defaultConfig: Release
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    INFOPLIST_FILE: Resources/Info.plist
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    CODE_SIGN_IDENTITY: ""
+    CODE_SIGNING_REQUIRED: "NO"
+    CODE_SIGNING_ALLOWED: "NO"
+
+targets:
+  PvZFusion:
+    type: application
+    platform: iOS
+    sources:
+      - Sources
+    resources:
+      - Resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pvzfusion.game
+        PRODUCT_NAME: "PvZ Fusion"
+        GENERATE_INFOPLIST_FILE: false
+        SUPPORTED_INTERFACE_ORIENTATIONS: "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+    info:
+      path: Resources/Info.plist
