@@ -213,6 +213,7 @@ class GameScene: SKScene {
     var zombies: [ZombieEntity] = []
     var projectiles: [Projectile] = []
     var sunDrops: [SunDrop] = []
+    var selectedPlant: PlantType? = nil
     var isShovelSelected = false
     var shovelIcon: SKSpriteNode?
     var shovelBank: SKSpriteNode?
@@ -356,7 +357,8 @@ class GameScene: SKScene {
 
         // Collect Sun
         for sun in sunDrops where !sun.collected {
-            if sun.node.frame.contains(loc) || sun.node.position.distance(to: loc) < 50 {
+            let dist = hypot(sun.node.position.x - loc.x, sun.node.position.y - loc.y)
+            if sun.node.frame.contains(loc) || dist < 50 {
                 collectSun(sun)
                 return
             }
