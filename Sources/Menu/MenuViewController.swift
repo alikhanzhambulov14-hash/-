@@ -7,67 +7,58 @@ class MenuViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 0.1, green: 0.28, blue: 0.16, alpha: 1)
+        view.backgroundColor = .black
         setupUI()
     }
 
     private func setupUI() {
-        // Original Menu Background
         let bgImageView = UIImageView(image: UIImage(named: "menu_bg"))
         bgImageView.contentMode = .scaleAspectFill
         bgImageView.frame = UIScreen.main.bounds
         bgImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(bgImageView)
 
-        // Version Label
+        let sw = UIScreen.main.bounds.width
+        let sh = UIScreen.main.bounds.height
+
+        // Title/Version Label
         let versionLabel = UILabel()
         versionLabel.text = "PvZ Fusion iOS v3.9"
-        versionLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        versionLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         versionLabel.textColor = .white
-        versionLabel.translatesAutoresizingMaskIntoConstraints = false
+        versionLabel.frame = CGRect(x: sw - 160, y: sh - 30, width: 150, height: 20)
         view.addSubview(versionLabel)
         
-        NSLayoutConstraint.activate([
-            versionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            versionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
-        ])
+        let advBtn = makeButton(img: "menu_adventure", action: #selector(playTapped), cx: sw * 0.75, cy: sh * 0.25, w: 330, h: 120)
+        let miniBtn = makeButton(img: "menu_challenges", action: #selector(playTapped), cx: sw * 0.75, cy: sh * 0.45, w: 310, h: 110)
+        let puzzleBtn = makeButton(img: "menu_vasebreaker", action: #selector(playTapped), cx: sw * 0.76, cy: sh * 0.63, w: 290, h: 100)
+        let survBtn = makeButton(img: "menu_survival", action: #selector(playTapped), cx: sw * 0.77, cy: sh * 0.80, w: 270, h: 90)
 
-        // Adventure Button
-        let advBtn = UIButton(type: .custom)
-        advBtn.setImage(UIImage(named: "menu_adventure"), for: .normal)
-        advBtn.addTarget(self, action: #selector(playTapped), for: .touchUpInside)
-        advBtn.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(advBtn)
+        // Tombstones
+        let optionsBtn = makeButton(img: "menu_woodsign1", action: #selector(notImplemented), cx: sw * 0.78, cy: sh * 0.95, w: 120, h: 60)
+        let helpBtn = makeButton(img: "menu_woodsign2", action: #selector(notImplemented), cx: sw * 0.88, cy: sh * 0.93, w: 100, h: 50)
+        let quitBtn = makeButton(img: "menu_quit", action: #selector(notImplemented), cx: sw * 0.96, cy: sh * 0.91, w: 80, h: 40)
         
-        NSLayoutConstraint.activate([
-            advBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 180),
-            advBtn.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
-            advBtn.widthAnchor.constraint(equalToConstant: 330),
-            advBtn.heightAnchor.constraint(equalToConstant: 120)
-        ])
+        let almanacBtn = makeButton(img: "menu_almanac", action: #selector(notImplemented), cx: sw * 0.50, cy: sh * 0.88, w: 150, h: 80)
         
         // Hover/pulse effect on adventure button
         UIView.animate(withDuration: 1.5, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction]) {
             advBtn.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
         }
-
-        // Almanac button (temp text button until we extract almanac sprite)
-        let almanacBtn = UIButton(type: .system)
-        almanacBtn.setTitle("Альманах Слияний", for: .normal)
-        almanacBtn.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        almanacBtn.setTitleColor(.white, for: .normal)
-        almanacBtn.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        almanacBtn.layer.cornerRadius = 10
-        almanacBtn.addTarget(self, action: #selector(almanacTapped), for: .touchUpInside)
-        almanacBtn.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(almanacBtn)
-        
-        NSLayoutConstraint.activate([
-            almanacBtn.centerXAnchor.constraint(equalTo: advBtn.centerXAnchor),
-            almanacBtn.topAnchor.constraint(equalTo: advBtn.bottomAnchor, constant: 20),
-            almanacBtn.widthAnchor.constraint(equalToConstant: 250),
-            almanacBtn.heightAnchor.constraint(equalToConstant: 45)
-        ])
+    }
+    
+    private func makeButton(img: String, action: Selector, cx: CGFloat, cy: CGFloat, w: CGFloat, h: CGFloat) -> UIButton {
+        let btn = UIButton(type: .custom)
+        if let image = UIImage(named: img) {
+            btn.setImage(image, for: .normal)
+        } else {
+            btn.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            btn.setTitle(img, for: .normal)
+        }
+        btn.addTarget(self, action: action, for: .touchUpInside)
+        btn.frame = CGRect(x: cx - w/2, y: cy - h/2, width: w, height: h)
+        view.addSubview(btn)
+        return btn
     }
 
     @objc private func playTapped() {
@@ -77,31 +68,9 @@ class MenuViewController: UIViewController {
         present(gameVC, animated: true)
     }
 
-    @objc private func almanacTapped() {
-        let alert = UIAlertController(title: "📖 Альманах Слияний", message: fusionAlmanacText(), preferredStyle: .alert)
+    @objc private func notImplemented() {
+        let alert = UIAlertController(title: "Not Implemented", message: "This 1:1 UI feature is coming in the next patch!", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
-    }
-
-    private func fusionAlmanacText() -> String {
-        return """
-        🌻 + 🌱 = ☀️🔫 Солнце-Стрелок
-        Стреляет и даёт солнце!
-
-        🌱 + ❄️ = 🧊 Ледяной Стрелок
-        Двойные замораживающие снаряды
-
-        🌻 + 🥜 = ☀️🛡 Солнце-Орех
-        Блокирует и даёт солнце
-
-        🌱 + 🥜 = 🔫🛡 Горохо-Орех
-        Стреляет и блокирует
-
-        ❄️ + 🥜 = 🧊🛡 Ледяной Орех
-        Замораживает ближних зомби
-
-        🍒 + 🌱 = 💥🔫 Пулемёт
-        Скорострельная стрельба
-        """
     }
 }
