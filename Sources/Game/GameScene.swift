@@ -213,7 +213,9 @@ class GameScene: SKScene {
     var zombies: [ZombieEntity] = []
     var projectiles: [Projectile] = []
     var sunDrops: [SunDrop] = []
-    var selectedPlant: PlantType? = nil
+    var isShovelSelected = false
+    var shovelIcon: SKSpriteNode?
+    var shovelBank: SKSpriteNode?
     
     var sunLabel: SKLabelNode!
     var plantButtons: [SKNode] = []
@@ -265,14 +267,33 @@ class GameScene: SKScene {
         quitBtn.zPosition = 100
         quitBtn.name = "quit"
         addChild(quitBtn)
+        
+        let sbank = SKSpriteNode(imageNamed: "shovelbank")
+        sbank.position = CGPoint(x: size.width - 150, y: size.height - 50)
+        sbank.zPosition = 100
+        sbank.setScale(0.8)
+        addChild(sbank)
+        shovelBank = sbank
+        
+        let shovel = SKSpriteNode(imageNamed: "shovel")
+        shovel.position = sbank.position
+        shovel.zPosition = 101
+        shovel.setScale(0.8)
+        shovel.name = "shovel"
+        addChild(shovel)
+        shovelIcon = shovel
     }
 
     func setupPlantBar() {
-        let barY: CGFloat = size.height - 50
         let types = PlantType.allCases
-        let startX: CGFloat = 200
-
+        let startX: CGFloat = 180
+        
         for (i, pt) in types.enumerated() {
+            let row = i / 7
+            let col = i % 7
+            let bx = startX + CGFloat(col) * 70
+            let by = size.height - 40 - CGFloat(row) * 90
+            
             let card = SKSpriteNode(imageNamed: "seedpacket")
             if card.texture == nil {
                 card.color = .brown
@@ -280,7 +301,7 @@ class GameScene: SKScene {
             } else {
                 card.setScale(0.7)
             }
-            card.position = CGPoint(x: startX + CGFloat(i) * 70, y: barY)
+            card.position = CGPoint(x: bx, y: by)
             card.zPosition = 90
             card.name = "plant_\(pt.rawValue)"
 
@@ -332,12 +353,32 @@ class GameScene: SKScene {
             }
         }
 
+        // Shovel Tool
+        if tapped.contains(where: { $0.name == "shovel" }) {
+            isShovelSelected = true
+            selectedPlant = nil
+            shovelIcon?.position = loc
+            selectionIndicator?.removeFromParent()
+            return
+        }
+        
+        if isShovelSelected {
+            if let (r, c) = gridCell(at: loc), let existing = plants[r][c] {
+                existing.node.removeFromParent()
+                plants[r][c] = nil
+            }
+            isShovelSelected = false
+            shovelIcon?.position = shovelBank?.position ?? .zero
+            return
+        }
+
         // Select Plant
         for node in tapped {
             if let name = node.name, name.hasPrefix("plant_") {
                 let typeName = name.replacingOccurrences(of: "plant_", with: "")
                 if let pt = PlantType(rawValue: typeName), self.sun >= pt.cost {
                     selectedPlant = pt
+                    isShovelSelected = false
                     updateSelectionHighlight(node.position)
                 }
                 return
@@ -359,6 +400,14 @@ class GameScene: SKScene {
         highlight.zPosition = 101
         addChild(highlight)
         selectionIndicator = highlight
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let loc = touch.location(in: self)
+        if isShovelSelected {
+            shovelIcon?.position = loc
+        }
     }
 
     func placePlant(_ type: PlantType, row: Int, col: Int) {
