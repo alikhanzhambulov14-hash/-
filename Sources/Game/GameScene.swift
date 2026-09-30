@@ -766,6 +766,8 @@ enum PlantType: String, CaseIterable {
     case cherrysplit
     case ironhead
     case peashooter
+    case lilypad
+    case flowerpot
     case projectilesnowpea
     case cactuspumpkin
     case ironsquash
