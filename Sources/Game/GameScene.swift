@@ -1382,37 +1382,21 @@ class GameScene: SKScene {
     
     func setupEnvironment() {
         let env = LevelManager.shared.getCurrentLevelData().environment
-        var bgName = "Background"
         
         switch env {
         case .day:
             rows = 5
-            bgName = "Almanac_GroundDay"
         case .night:
             rows = 5
-            bgName = "Almanac_GroundNight"
         case .pool:
             rows = 6
-            bgName = "BigPool_land"
         case .fog:
             rows = 6
-            bgName = "BigPool_land" // Add fog overlay later
         case .roof:
             rows = 5
-            bgName = "Almanac_GroundRoof"
         }
         
-        // Update background
-        if let bg = self.childNode(withName: "background") as? SKSpriteNode {
-            bg.texture = SKTexture(imageNamed: bgName)
-        } else {
-            let background = SKSpriteNode(imageNamed: bgName)
-            background.name = "background"
-            background.position = CGPoint(x: size.width/2, y: size.height/2)
-            background.zPosition = -10
-            background.size = size
-            addChild(background)
-        }
+        // Background has been removed as requested
     }
 
     override func didMove(to view: SKView) {
