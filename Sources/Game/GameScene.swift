@@ -1206,6 +1206,7 @@ class FusionManager {
 // MARK: - Game Entities
 
 class PlantEntity {
+    var isAsleep: Bool = false
     var type: PlantType!
     
     var hp: Int
@@ -1220,14 +1221,28 @@ class PlantEntity {
         self.hp = type.hp
         self.row = row
         self.col = col
+        
         self.node = node
+        let env = LevelManager.shared.getCurrentLevelData().environment
+        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
+            self.isAsleep = true
+            self.node.alpha = 0.5 // visual representation of sleep
+        }
+
     }
     init(fusion: PlantType, row: Int, col: Int, node: SKNode) {
         self.type = fusion
         self.hp = fusion.hp
         self.row = row
         self.col = col
+        
         self.node = node
+        let env = LevelManager.shared.getCurrentLevelData().environment
+        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
+            self.isAsleep = true
+            self.node.alpha = 0.5 // visual representation of sleep
+        }
+
     }
     var canShoot: Bool {
         let f = type { return [.sunPea, .iceShooter, .peaNut, .gatlingPea, .allPeater, .winterMelon, .fumePea, .firePea, .chomperPea].contains(f) }
@@ -1261,7 +1276,14 @@ class ZombieEntity {
         self.type = type
         self.hp = type.hp
         self.row = row
+        
         self.node = node
+        let env = LevelManager.shared.getCurrentLevelData().environment
+        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
+            self.isAsleep = true
+            self.node.alpha = 0.5 // visual representation of sleep
+        }
+
         self.speed = type.speed
     }
 }
@@ -1274,7 +1296,14 @@ class Projectile {
     var isDead = false
 
     init(node: SKNode, row: Int, isIce: Bool, damage: Int = 20) {
+        
         self.node = node
+        let env = LevelManager.shared.getCurrentLevelData().environment
+        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
+            self.isAsleep = true
+            self.node.alpha = 0.5 // visual representation of sleep
+        }
+
         self.row = row
         self.isIce = isIce
         self.damage = damage
@@ -1287,7 +1316,14 @@ class SunDrop {
     var collected = false
 
     init(node: SKNode, targetY: CGFloat) {
+        
         self.node = node
+        let env = LevelManager.shared.getCurrentLevelData().environment
+        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
+            self.isAsleep = true
+            self.node.alpha = 0.5 // visual representation of sleep
+        }
+
         self.targetY = targetY
     }
 }
@@ -1300,15 +1336,22 @@ class MowerEntity {
 
     init(row: Int, node: SKNode) {
         self.row = row
+        
         self.node = node
+        let env = LevelManager.shared.getCurrentLevelData().environment
+        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
+            self.isAsleep = true
+            self.node.alpha = 0.5 // visual representation of sleep
+        }
+
     }
 }
 
 // MARK: - Game Scene
 
 class GameScene: SKScene {
-    let rows = 5
-    let cols = 9
+    var rows = 5
+    var cols = 9
     let cellW: CGFloat = 85
     let cellH: CGFloat = 100
     let gridOffsetX: CGFloat = 180
@@ -1336,7 +1379,44 @@ class GameScene: SKScene {
     var zombiesSpawned = 0
     var isLevelComplete = false
     
+    
+    func setupEnvironment() {
+        let env = LevelManager.shared.getCurrentLevelData().environment
+        var bgName = "Background"
+        
+        switch env {
+        case .day:
+            rows = 5
+            bgName = "Almanac_GroundDay"
+        case .night:
+            rows = 5
+            bgName = "Almanac_GroundNight"
+        case .pool:
+            rows = 6
+            bgName = "BigPool_land"
+        case .fog:
+            rows = 6
+            bgName = "BigPool_land" // Add fog overlay later
+        case .roof:
+            rows = 5
+            bgName = "Almanac_GroundRoof"
+        }
+        
+        // Update background
+        if let bg = self.childNode(withName: "background") as? SKSpriteNode {
+            bg.texture = SKTexture(imageNamed: bgName)
+        } else {
+            let background = SKSpriteNode(imageNamed: bgName)
+            background.name = "background"
+            background.position = CGPoint(x: size.width/2, y: size.height/2)
+            background.zPosition = -10
+            background.size = size
+            addChild(background)
+        }
+    }
+
     override func didMove(to view: SKView) {
+        setupEnvironment()
         totalZombiesToSpawn = LevelManager.shared.getZombieCountForCurrentLevel()
         
         plants = Array(repeating: Array(repeating: nil, count: cols), count: rows)
@@ -1583,6 +1663,29 @@ class GameScene: SKScene {
             z.hp = 0
             z.isDead = true
         }
+    }
+
+    
+    func canPlant(type: PlantType, atRow row: Int, col: Int) -> Bool {
+        let env = LevelManager.shared.getCurrentLevelData().environment
+        let isWater = (env == .pool || env == .fog) && (row == 2 || row == 3)
+        let isRoof = (env == .roof)
+        
+        let nodeAtPos = plants.first { $0.row == row && $0.col == col }
+        
+        if isWater && type != .lilypad {
+            if nodeAtPos?.type != .lilypad {
+                return false
+            }
+        }
+        
+        if isRoof && type != .flowerpot {
+            if nodeAtPos?.type != .flowerpot {
+                return false
+            }
+        }
+        
+        return true
     }
 
     func spawnPlantNode(texture: String, row: Int, col: Int, isFusion: Bool) -> SKNode {
