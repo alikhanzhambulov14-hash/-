@@ -1211,7 +1211,6 @@ class FusionManager {
         // In PvZFusion, usually it's just Name1Name2, but we don't have perfect capitalization in rawValue.
         // We will just do a linear scan (inefficient but works for 1000 items)
         let combined = name1 + name2
-        let combined2 = name2 + name1
         
         for p in PlantType.allCases {
             let pr = p.rawValue
@@ -1612,8 +1611,8 @@ class GameScene: SKScene {
             if let existType = existing.type, let fusionResult = FusionManager.fuse(existType, type) {
                 sun -= type.cost
                 existing.node.removeFromParent()
-                spawnPlantNode(texture: fusionResult.textureName, row: row, col: col, isFusion: true)
-                let plant = PlantEntity(fusion: fusionResult, row: row, col: col, node: plants[row][col]!.node) // wait, update ref
+                let newNode = spawnPlantNode(texture: fusionResult.textureName, row: row, col: col, isFusion: true)
+                let plant = PlantEntity(fusion: fusionResult, row: row, col: col, node: newNode)
                 plants[row][col] = plant
                 selectedPlant = nil
                 selectionIndicator?.removeFromParent()
@@ -1674,7 +1673,7 @@ class GameScene: SKScene {
         let isWater = (env == .pool || env == .fog) && (row == 2 || row == 3)
         let isRoof = (env == .roof)
         
-        let nodeAtPos = plants.first { $0.row == row && $0.col == col }
+        let nodeAtPos = plants[row][col]
         
         if isWater && type != .lilypad {
             if nodeAtPos?.type != .lilypad {
