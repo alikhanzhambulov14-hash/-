@@ -254,7 +254,6 @@ class GameScene: SKScene {
     
     var selectedSeeds: [PlantType] = PlantType.allCases
     
-    var sunLabel: SKLabelNode!
     var plantButtons: [SKNode] = []
     var selectionIndicator: SKShapeNode?
     weak var gameVC: GameViewController?
@@ -273,6 +272,8 @@ class GameScene: SKScene {
         setupPlantBar()
         setupMowers()
         startSpawning()
+        
+        gameVC?.updateSun(sun)
     }
     
     func setupMowers() {
@@ -310,30 +311,6 @@ class GameScene: SKScene {
         seedBankBg.setScale(0.8)
         addChild(seedBankBg)
 
-        // Sun counter
-        let sunIcon = SKSpriteNode(imageNamed: "sun")
-        sunIcon.position = CGPoint(x: 50, y: size.height - 45)
-        sunIcon.setScale(0.7)
-        sunIcon.zPosition = 100
-        addChild(sunIcon)
-
-        sunLabel = SKLabelNode(text: "\(sun)")
-        sunLabel.fontName = "Helvetica-Bold"
-        sunLabel.fontSize = 24
-        sunLabel.fontColor = .black
-        sunLabel.position = CGPoint(x: 50, y: size.height - 85)
-        sunLabel.zPosition = 100
-        addChild(sunLabel)
-
-        let quitBtn = SKLabelNode(text: "Menu")
-        quitBtn.fontName = "Helvetica-Bold"
-        quitBtn.fontSize = 24
-        quitBtn.fontColor = .white
-        quitBtn.position = CGPoint(x: size.width - 60, y: size.height - 40)
-        quitBtn.zPosition = 100
-        quitBtn.name = "quit"
-        addChild(quitBtn)
-        
         let sbank = SKSpriteNode(imageNamed: "shovelbank")
         sbank.position = CGPoint(x: size.width - 150, y: size.height - 50)
         sbank.zPosition = 100
@@ -406,10 +383,6 @@ class GameScene: SKScene {
         let loc = touch.location(in: self)
 
         let tapped = nodes(at: loc)
-        if tapped.contains(where: { $0.name == "quit" }) {
-            gameVC?.returnToMenu()
-            return
-        }
 
         // Collect Sun
         for sun in sunDrops where !sun.collected {
@@ -447,6 +420,7 @@ class GameScene: SKScene {
                     selectedPlant = pt
                     isShovelSelected = false
                     updateSelectionHighlight(node.position)
+                    gameVC?.showFusionHint()
                 }
                 return
             }
@@ -760,39 +734,14 @@ class GameScene: SKScene {
     func gameOver() {
         if isGamePaused { return }
         isGamePaused = true
-        
-        let label = SKLabelNode(text: "THE ZOMBIES ATE YOUR BRAINS!")
-        label.fontName = "Helvetica-Bold"
-        label.fontSize = 40
-        label.fontColor = .red
-        label.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        label.zPosition = 1000
-        addChild(label)
-        
-        run(SKAction.sequence([
-            SKAction.wait(forDuration: 3.0),
-            SKAction.run { [weak self] in self?.gameVC?.returnToMenu() }
-        ]))
+        gameVC?.showResult(title: "ЗОМБИ СЪЕЛИ ВАШИ МОЗГИ!")
     }
     
     func levelComplete() {
         if isGamePaused { return }
         isGamePaused = true
-        
-        let label = SKLabelNode(text: "LEVEL COMPLETE!")
-        label.fontName = "Helvetica-Bold"
-        label.fontSize = 50
-        label.fontColor = .yellow
-        label.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        label.zPosition = 1000
-        addChild(label)
-        
         LevelManager.shared.completeLevel()
-        
-        run(SKAction.sequence([
-            SKAction.wait(forDuration: 3.0),
-            SKAction.run { [weak self] in self?.gameVC?.returnToMenu() }
-        ]))
+        gameVC?.showResult(title: "УРОВЕНЬ ПРОЙДЕН!")
     }
 
     func shootPea(from plant: PlantEntity) {
@@ -868,6 +817,6 @@ class GameScene: SKScene {
     }
 
     func updateSun() {
-        sunLabel.text = "\(sun)"
+        gameVC?.updateSun(sun)
     }
 }
