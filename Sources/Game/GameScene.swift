@@ -3,138 +3,1211 @@ import SpriteKit
 // MARK: - Data Models
 
 enum PlantType: String, CaseIterable {
-    case sunflower, peashooter, wallnut, snowpea, cherrybomb
-    case potatomine, chomper, puffshroom, torchwood, tallnut, squash, repeater
-    case sunshroom, fumeshroom, threepeater, jalapeno, melonpult, cabbagepult
+    // Base plants & Fusions combined for simplicity
+    case pudding
+    case icelotus
+    case icecattail
+    case ironpeaz
+    case starpea
+    case mark
+    case seanut
+    case ironpuff
+    case leafupper
+    case pinefurnace
+    case wateringcangold
+    case lanternblover
+    case tallnut
+    case golddoom
+    case k
+    case squashmelon
+    case scaredyshroom
+    case lotusbamboo
+    case threesquash
+    case hypnocattailgirl
+    case blacktrain
+    case cherryumbrella
+    case hypnochomper
+    case cattailplant
+    case unitywatermarkproto
+    case q
+    case signboard
+    case endoflamegirl
+    case blover
+    case cabbagepot
+    case doomgarlic
+    case landsubmarine
+    case potatomine
+    case squashtorch
+    case topleft
+    case minisandmonster
+    case goldcabbage
+    case bucketpaper
+    case doompot
+    case bottonright
+    case nutfume
+    case bignut
+    case superjalanut
+    case snowmonster
+    case ultimatecattail
+    case cherrymine
+    case garlicsniper
+    case melonjump
+    case cabbagepult
+    case achievement
+    case coachpaper
+    case iceseashroom
+    case goldiceshroom
+    case cattaillour
+    case threespike
+    case uifoldoutclosed
+    case icecannon
+    case chomperpumpkin
+    case tground
+    case petjackbox
+    case threekelp
+    case solarstar
+    case levelup
+    case superlevatation
+    case bluelight
+    case silvergarlic
+    case colorfulfume
+    case kelpmine
+    case threetorch
+    case zambonismoke
+    case hypnosplit
+    case bigblack
+    case simplefilebrowsermoreoptions
+    case laserumbrella
+    case thornsspruce
+    case splashbullet
+    case seamine
+    case hypnopuff
+    case scaredypumpkin
+    case seapumpkin
+    case simplefilebrowserdrag
+    case poolsparkly
+    case solarlily
+    case flyingthreepeater
+    case tallfirenut
+    case ultimategarlicsplit
+    case ironpeabullet
+    case moneymelon
+    case hugewave
+    case doomumbrella
+    case superbomb
+    case luckyblover
+    case thorns
+    case horseboss
+    case silversunflower
+    case beach
+    case fire
+    case lv
+    case snowbossaword
+    case firesniper
+    case ultimatemagnet
+    case ultimatepumpkin
+    case footballdolphin
+    case torchseashroom
+    case redjackson
+    case whiteellipse
+    case peasmallpuff
+    case diamondimitater
+    case doomcactus
+    case snowdrown
+    case gravenut
+    case peapot
+    case sunshroom
+    case superthreepeater
+    case hypnogarlic
+    case abyssswordstar
+    case footballboss
+    case hypnoemperor
+    case caltroppot
+    case moneysunflower
+    case icedoom
+    case silvercabbage
+    case potatofume
+    case jalatorch
+    case startready
+    case ultimateportalnut
+    case lanternumbrella
+    case doublepuff
+    case biggloom
+    case melonpumpkin
+    case lanternpumpkin
+    case ultimatefootball
+    case hypnoqueen
+    case biggatlingpea
+    case ifvblover
+    case melonpot
+    case obsidianspike
+    case szw
+    case sunpot
+    case superhypnodoom
+    case ironpeashooter
+    case flagfootball
+    case ultimatelanternsplit
+    case fill
+    case doomsniper
+    case fishrod
+    case doomseashroom
+    case fumepumpkin
+    case gardenbattle
+    case bamboodragon
+    case melonnut
+    case ultimategloom
+    case puffdoom
+    case ultimatesnipergatling
+    case dolldiamond
+    case doom
+    case cactus
+    case frontbottom
+    case pickaxestarbullet
+    case extremesnowpea
+    case jackboxstarbullet
+    case hugenut
+    case magnetfume
+    case potatopumpkin
+    case chompersquash
+    case jalapumpkin
+    case target
+    case goldcorncannon
+    case ultimatechomper
+    case obsidianwallnut
+    case chomper
+    case umbrellafume
+    case shulkbamboo
+    case twinflowerpreview
+    case suniceshroom
+    case ultimatebiggatling
+    case bamboospruce
+    case imitaterpuffs
+    case legionsniper
+    case cherrychomper
+    case bigcoinshroom
+    case dust
+    case goldpot
+    case hypnopea
+    case sealantern
+    case potatosquashbody
+    case doomgatling
+    case ifvpumpkin
+    case goldhypnoshroom
+    case izmap
+    case nutchomper
+    case lanternpea
+    case potatobullet
+    case deathmine
+    case sniperchomper
+    case bigboom
+    case cornfume
+    case supercaltroppot
+    case cabbagecaltrop
+    case starfume
+    case petdrown
+    case torchsunflower
+    case unitywatermarkedu
+    case sunnut
+    case electriconion
+    case multiselectiontoggleoff
+    case caltropfume
+    case snowgatlingpuff
+    case goldsunflower
+    case supertorch
+    case h
+    case diamonddoll
+    case icecabbage
+    case ultimategatling
+    case sunpumpkin
+    case sandjackson
+    case squashcabbage
+    case threepeater
+    case bigpot
+    case helmetfume
+    case dropdownarrow
+    case magiclandie
+    case magnetmelon
+    case watercan
+    case waterfurnace
+    case imitatewheat
+    case cherryblover
+    case bloverumbrella
+    case hypnosquash
+    case jalapeashooter
+    case dolphinrider
+    case hypnogatling
+    case pool
+    case sunjalapeno
+    case goldgarlic
+    case lotusaloes
+    case ultimatesungatlingpuff
+    case ultimateexplodecannon
+    case doomtorch
+    case doomjalapeno
+    case torchfume
+    case cornpult
+    case obsidianinp
+    case garlicrepeater
+    case leafmid
+    case nutmine
+    case firekelp
+    case dollgold
+    case garlicfume
+    case shulkfurnace
+    case twinmarigold
+    case uicheckmark
+    case goldthreetorch
+    case nuclearsquash
+    case wheat
+    case g
+    case peapumpkin
+    case ironcorn
+    case smallpuff
+    case conveyorbelt
+    case tallicenut
+    case smallumbrella
+    case doombullet
+    case hypnorepeater
+    case icesquash
+    case superblackhorse
+    case doompea
+    case ultimatemelon
+    case superhypnogatling
+    case almanacplant
+    case sunblue
+    case scaredypot
+    case hypnojalapeno
+    case nutumbrella
+    case flagmeterparts
+    case graves
+    case doomstar
+    case jalasquash
+    case squalour
+    case garlicgatling
+    case uisprite
+    case icelaserumbrella
+    case threespikebullet
+    case unitywatermarksmall
+    case thronsaloes
+    case peanut
+    case ultimatetorch
+    case blackflagfootball
+    case fumechomper
+    case garlicpea
+    case spikerock
+    case cherryscaredy
+    case deathchomper
+    case starfruit
+    case finalfume
+    case obsidianpotatonut
+    case threetang
+    case redemeraldumbrella
+    case hypnotorch
+    case ultimatefootballdrown
+    case ultimatefireseashroom
+    case potatodoom
+    case blackhorse
+    case icecherry
+    case ultimatebamboo
+    case solarpot
+    case grassdark
+    case hypnoblover
+    case portalcorn
+    case cherrysupergatling
+    case doomcabbage
+    case spikerock
+    case diamondpotatonut
+    case emeraldumbrella
+    case hypnoshroom
+    case doomshroom
+    case glow
+    case jigsawpresent
+    case kbcak
+    case tanglekelp
+    case ultimatesunmagnet
+    case mindcontrol
+    case doomplantern
+    case blackfootball
+    case redpot
+    case supermelon
+    case thronsshulk
+    case ultimatebigchomper
+    case lawnshooter
+    case rsunny
+    case ultimategatlingblover
+    case icepot
+    case peachomper
+    case ultimateplantern
+    case sbangdai
+    case pickaxehat
+    case wintermelon
+    case icehypno
+    case imitaterclouds
+    case obsidianjalapeno
+    case pethorse
+    case torchmine
+    case eyebow
+    case puffchomper
+    case moneygarlic
+    case fumeshroom
+    case goldphonograph
+    case bloverpult
+    case cherrypaper
+    case silvermelon
+    case unitywatermarktrialbig
+    case machinelevatation
+    case ultimatesunnut
+    case peafume
+    case squashpumpkin
+    case supergatling
+    case threeplantern
+    case hypnopot
+    case snowpeashooter
+    case magnetblover
+    case ultimatespring
+    case garlicsplit
+    case gardenprotection
+    case ktop
+    case kelptorch
+    case cherrynut
+    case scaredystar
+    case threenut
+    case ultimatedolphin
+    case minisnowmonster
+    case doomchomper
+    case pumpiner
+    case ultimatehypnopumpkin
+    case melonumbrella
+    case wateringcan
+    case superfertilizer
+    case snowsplit
+    case startorch
+    case summonedhorse
+    case jalagatling
+    case soft
+    case circle
+    case hypnopumpkin
+    case solarsunflower
+    case sright
+    case ultimatedoomgatling
+    case superchomper
+    case qzright
+    case wh
+    case silverpot
+    case firefume
+    case superblackfootball
+    case suncaltrop
+    case whitefootball
+    case ultimatecorn
+    case jiyu
+    case preview
+    case sl
+    case normalminigames
+    case sunstar
+    case sunbomb
+    case d
+    case portalpolevaulter
+    case superkirov
+    case chompershooter
+    case moneycorn
+    case ultimatemachinenut
+    case superthreegatling
+    case cactusstar
+    case jackboxdoom
+    case portaldoom
+    case iceshroom
+    case sunblover
+    case ultimatehorse
+    case cherrypumpkin
+    case supersnowgatling
+    case shovel
+    case greencherry
+    case supersunnut
+    case icedoomgloom
+    case garlicpot
+    case checkmark
+    case superhurricaneblover
+    case iceplantern
+    case cabbagecannon
+    case doompeashooter
+    case dm
+    case puffpumpkin
+    case moneynut
+    case ultimatedoomscared
+    case bigchomper
+    case cherrygatling
+    case scarypot
+    case seastar
+    case jackboxpogo
+    case presentopen
+    case machine
+    case superspruce
+    case magnetpumpkin
+    case superfurnace
+    case torchfirepumpkin
+    case fertilizer
+    case hypnopeashooter
+    case qtop
+    case squashtang
+    case swordstar
+    case garlic
+    case bucketdoom
+    case scaredydoom
+    case puffsquash
+    case tallnutfootballz
+    case goldmagnet
+    case trackbullet
+    case nutpot
+    case ultimatecornfume
+    case enderpumpkin
+    case hypnofirepea
+    case supercaltrop
+    case gravesunshroom
+    case yellowlight
+    case cornpot
+    case cornpuff
+    case lanternpot
+    case seamagnet
+    case moneyumbrella
+    case sunexplosionpowie
+    case doommelon
+    case portalsniper
+    case splitpuff
+    case threemelon
+    case hurricaneblover
+    case firecabbage
+    case magnetcorn
+    case silverhypnoshroom
+    case cactusblover
+    case ironstar
+    case melonpult
+    case phonograph
+    case cornnut
+    case projectilepea
+    case snowflakes
+    case starsquash
+    case startplant
+    case shulklotus
+    case waterbamboo
+    case potatochomper
+    case ultimatefly
+    case a
+    case gravebuster
+    case pickaxepumpkin
+    case potatopuff
+    case pickaxe
+    case sniperscaredy
+    case gatlingpuff
+    case pot
+    case arrow
+    case square
+    case hat
+    case randomlevels
+    case goldcorn
+    case lanterngatling
+    case supertallnut
+    case superhorse
+    case sprout
+    case goldhypnodoom
+    case lanternmagnet
+    case ultimatestartorch
+    case peasunflower
+    case nightpool
+    case normallegion
+    case garlictorch
+    case pinkonion
+    case sniperpea
+    case ulimatewintermelon
+    case cherrythreepeater
+    case icecactus
+    case areatex
+    case superkelp
+    case silverdoll
+    case travellevels
+    case rain
+    case scaredypotato
+    case sickle
+    case sniperpot
+    case kelpnut
+    case presentz
+    case sunchomper
+    case scaredfume
+    case icefumeshroom
+    case projectilecactus
+    case yellowfootball
+    case piaofustone
+    case ultimatehypnodoom
+    case puffnut
+    case diamoncone
+    case superstarbullet
+    case sheng
+    case cherryhypno
+    case jalaspike
+    case unitywatermarktrial
+    case ifvstar
+    case cactusfume
+    case healthslider
+    case splitpea
+    case temperparticle
+    case ironmelon
+    case doomthreepeater
+    case cobcannon
+    case flagmeterlevelprogress
+    case sniperpuff
+    case superpolevaulter
+    case doomfume
+    case ultimatekelp
+    case threemine
+    case doomcorn
+    case bucketnut
+    case bottonmid
+    case icespike
+    case firecherry
+    case moneymeloneffect
+    case unitywatermarkdev
+    case dirt
+    case superumbrella
+    case cactusumbrellaleaf
+    case cherrypot
+    case icepumpkin
+    case petfootball
+    case garlicmelon
+    case jackboxpumpkin
+    case peamine
+    case multiselectiontoggleon
+    case goldmelon
+    case sproing
+    case bloverpot
+    case nutpumpkin
+    case trainingdummy
+    case explosionpowie
+    case ultimatepoisonfume
+    case seablover
+    case simheiatlas
+    case cherrypuff
+    case doompumpkin
+    case icepuff
+    case melonblover
+    case seashroom
+    case frozenpear
+    case gatlingpea
+    case jalacorn
+    case scaredyblover
+    case doomsquash
+    case piackaxestar
+    case icespikerock
+    case gbody
+    case icegloom
+    case fireend
+    case scaredysun
+    case thornslotus
+    case hypnomine
+    case stonedancer
+    case garlicthreepeater
+    case seascaedyshroom
+    case f
+    case hypnomelon
+    case shulkflower
+    case bigpumpkin
+    case supergatlingpumpkin
+    case travelexperiences
+    case superpumpkin
+    case enderpumpiner
+    case unitysplashholographictrackingloss
+    case darkthreepeater
+    case shat
+    case cherrybomb
+    case ultimatepuff
+    case jalatang
+    case squash
+    case doomcherry
+    case starpuff
+    case meloncaltrop
+    case doublesnow
+    case cherrystar
+    case potatosquash
+    case roof
+    case caltropkelp
+    case knob
+    case passionfruit
+    case ultimatejalapeno
+    case cursorclick
+    case peablover
+    case sunbank
+    case garlicultimatechomper
+    case garlicblover
+    case rightmid
+    case icestar
+    case towerenter
+    case silvercorn
+    case dollsilver
+    case cabbagenut
+    case magnetdoom
+    case superdoomscaredy
+    case icedoomspark
+    case bamboodeath
+    case ultimateminigun
+    case footballdrown
+    case finalwave
+    case cherryshooter
+    case chrysantheautumn
+    case hypnocattailbullet
+    case shootingday
+    case jalapeno
+    case ifvironpuff
+    case day
+    case magicsnow
+    case lanternshine
+    case blovermine
+    case icecaltrop
+    case night
+    case pow
+    case superseashroom
+    case ironnut
+    case supermachinenut
+    case ultimatecabbagecannon
+    case supernutshooter
+    case icedoomfume
+    case threepot
+    case firecaltrop
+    case puffseashroom
+    case scaredynut
+    case silvericeshroom
+    case goldbungi
+    case silverumbrella
+    case minigames
+    case icemine
+    case lanterncactus
+    case smalliceshroom
+    case cabbageumbrella
+    case apple
+    case hypnomagnet
+    case jackboxstar
+    case marigold
+    case umbrellapot
+    case seacurtus
+    case ironpumpkin
+    case icepeach
+    case cherryjalapeno
+    case goddoom
+    case nutblover
+    case ultimatehypno
+    case sb
+    case lanternsplit
+    case yellowdoom
+    case bigdoomstar
+    case umbrellaleaf
+    case cleaner
+    case squashspike
+    case starblover
+    case abyssbuffbank
+    case cornblover
+    case watershulk
+    case dolphinpaper
+    case endoflame
+    case corncaltrop
+    case flagmeter
+    case liberationsanssdfatlas
+    case caltrop
+    case corncabbage
+    case advanturechallenges
+    case firecannon
+    case icefurnace
+    case normaladvanture
+    case squashnut
+    case ultimatehugenut
+    case scaredyhypno
+    case redsplat
+    case super
+    case quickjackson
+    case ultimatemeloncannon
+    case cherrytorch
+    case firepea
+    case kelpfume
+    case lotusspruce
+    case sunhypno
+    case meloncannon
+    case sunseashroom
+    case presentopenz
+    case wallnutparticleslarge
+    case cabbagefume
+    case emojione
+    case doompaper
+    case aquarium
+    case cactusnut
+    case searchtex
+    case tree
+    case cactuscaltrop
+    case fillbank
+    case topright
+    case wallnut
+    case firespike
+    case cabbageblover
+    case seafume
+    case ultimatehelmetgatling
+    case nutshooter
+    case doublepea
+    case garlicstar
+    case snowmonsterrider
+    case firenut
+    case gloomshroom
+    case hypnonut
+    case jalamine
+    case present
+    case waterspruce
+    case firecattail
+    case portalnut
+    case peashooterz
+    case imitater
+    case seachomper
+    case sunflower
+    case lanternchomper
+    case portalmelon
+    case cherrysplit
+    case ironhead
+    case peashooter
+    case projectilesnowpea
+    case cactuspumpkin
+    case ironsquash
+    case jalastar
+    case defaultparticlesystem
+    case seedbank
+    case ultimatesunflower
+    case garliccabbage
+    case mixbomb
+    case ultimatecactus
+    case mushroomgarden
+    case starnut
+    case puffjalapeno
+    case goldumbrella
+    case snowpool
+    case ultimateseashroom
+    case bank
+    case moneyhypno
+    case hhh
+    case uimask
+    case snowgatling
+    case doomsunflower
+    case water
+    case doomblover
+    case magnetshroom
+    case ironcone
+    case jaladoubleshooter
+    case bottonleft
+    case peasplat
+    case xxspot
+    case hamburger
+    case lanternfume
+    case magnetstarbullet
+    case allpeater
+    case dong
+    case fireseashroom
+    case caltropnut
+    case squashcorn
+    case hypnodoom
+    case coinshroom
+    case cabbagepuff
+    case treasuremine
+    case headstar
+    case icescaredyshroom
+    case superfume
+    case cherrysquash
+    case ifvpotatopumpkin
+    case flagchallenges
+    case warningsign
+    case duskroof
+    case redlunarcabbage
+    case superhypno
+    case jigsawsprites
+    case bigstar
+    case blackelephant
+    case threepumpkin
+    case icecorn
+    case normalcharred
+    case threegoldplantern
+    case bigsunshroom
+    case kelpseed
+    case ultimatespruce
+    case jacksondriverboss
+    case garliccorn
+    case ultimatefume
+    case cherrymagnet
+    case bamboo
+    case sungatlingpuff
+    case plantern
+    case cornmelon
+    case peasquash
+    case bungeetarget
+    case hammer
+    case snowdolphinrider
+    case hypnofume
+    case leaflower
+    case ultimatepresentkelp
+    case firespikerock
+    case moneycabbage
+    case seapot
+    case melonpuff
+    case forwardarrow
+    case extrapot
+    case icetorch
+    case shootingplayer
+    case ultimateiceshroom
+    case protal
+    case firegloom
+    case explosionspudow
+    case nucleardoomcherry
+    case resizecursor
+    case supersubmarine
+    case nightsnow
+    case sprucefurnace
+    case particles
+    case purplenutparticles
+    case snow
+    case dancepol
+    case gravesunflower
+    case corn
+    case furskirt
+    case lanternrepeater
+    case obsidianwheat
+    case starpumpkin
+    case cursordefault
+    case superdriver
+    case ultimatesnowgatlingpuff
+    case suncabbage
+    case icebean
+    case projtilecabbage
+    case ancientsunnut
+    case ultimateblover
+    case unitywatermarkpluginbeta
+    case startset
+    case supergatlingfume
+    case garlicumbrella
+    case bucketfume
+    case silverdoom
+    case golddoll
+    case lanternstar
+    case starhypno
+    case doomkelp
+    case jacksondriver
+    case magnetcactus
+    case sunmagnet
+    case cherryultimatepumpkin
+    case squashkelp
+    case ultimatecannon
+    case pumpkin
+    case cherryfume
+    case jalasplit
+    case sunmine
+    case ultimatesunbullet
+    case qqqq
+    case goldbugspray
+    case bloverpumpkin
+    case helmetgatling
+    case superstar
+    case starsniper
+    case diamond
+    case leftmid
+    case lunarcabbage
+    case threecorn
+    case torchpumpkin
+    case ultimatefurnace
+    case unitywatermarkbeta
+    case swordhealth
+    case goldfertilize
+    case garlicpumpkin
+    case melonfume
+    case cabbagemelon
+    case redpea
+    case shovelbank
+    case kelppuff
+    case spruceshulk
+    case supercherryshooter
+    case kirovairship
+    case moneypot
+    case ultimateicedoom
+    case cherrysubmarine
+    case cornumbrella
+    case torchwood
+    case ashthreepeater
+    case nuttorch
+    case pickaxeclothe
+    case ifvwingman
+    case peascaredy
+    case seasquash
+    case wateraloes
+    case wheatprotection
+    case threecabbage
+    case iceblover
+    case spruceshooter
+    case supergatlingpeamine
+    case ironstarbullet
+    case ultimatejacksondriver
+    case thornsbamboo
+    case points
+    case waterround
+    case watersplash
+    case bedrocktallnut
+    case doomnut
+    case ultimatejalapuff
+    case squashblover
+    case sunsquash
+    case ultimatestar
+    case shooting
+    case moneyiceshroom
+    case uifoldoutopened
+    case magnetnut
+    case firemelon
+    case firesquash
+    case ice
+    case garlicnut
+    case poolcleaner
+    case solarcabbage
+    case explosioncloud
+    case seahypno
+    case lanternnut
+    case bubblecannon
+    case leafleft
+    case petkirov
+    case gatlingblackfootball
+    case jigpresent
+    case ultimatejalanut
+    case ultimatebigsniper
+    case qzleft
+    case magnetstar
+    case z
+    case superbombthrower
+    case shoot
+    case chomperscaredy
+    case bamboofurnace
 
     var textureName: String {
         return self.rawValue
     }
     var cost: Int {
-        switch self {
-        case .sunflower: return 50
-        case .peashooter: return 100
-        case .wallnut: return 50
-        case .snowpea: return 175
-        case .cherrybomb: return 150
-        case .potatomine: return 25
-        case .chomper: return 150
-        case .puffshroom: return 0
-        case .torchwood: return 175
-        case .tallnut: return 125
-        case .squash: return 50
-        case .repeater: return 200
-        case .sunshroom: return 25
-        case .fumeshroom: return 75
-        case .threepeater: return 325
-        case .jalapeno: return 125
-        case .melonpult: return 300
-        case .cabbagepult: return 100
-        }
+        return 100
     }
     var hp: Int {
-        switch self {
-        case .wallnut: return 4000
-        case .tallnut: return 8000
-        default: return 300
-        }
+        if self.rawValue.contains("nut") { return 4000 }
+        if self.rawValue.contains("tallnut") { return 8000 }
+        return 300
     }
 }
 
-enum FusionType: String {
-    case sunPea       // sunflower + peashooter
-    case iceShooter   // peashooter + snowpea
-    case sunNut       // sunflower + wallnut
-    case peaNut       // peashooter + wallnut
-    case iceNut       // snowpea + wallnut
-    case gatlingPea   // cherrybomb + peashooter
-    case bigChomper   // chomper + chomper (or wallnut)
-    case allPeater    // repeater + snowpea + peashooter
-    case winterMelon  // melon + snowpea
-    case fumePea      // fumeshroom + peashooter
-    case firePea      // torchwood + peashooter
-    case chomperPea   // chomper + peashooter
-    case squashBomb   // squash + cherrybomb
+enum ZombieType: String, CaseIterable {
+    case jalasquashzombie
+    case flagzombie
+    case boatimp
+    case snowshieldzombie
+    case bluegargantuar
+    case armoredimpzombie
+    case supersnowmonsterzombie
+    case obsidianclawzombie
+    case squashzombie
+    case sunnutzombie
+    case ironpeadoorzombie
+    case snowgunzombie
+    case snowdrownzombie
+    case superpolozombie
+    case ironpeazombie
+    case impzombie
+    case endoflamezombie
+    case normalzombie
+    case supermachinenutzombie
+    case ultimateendoflamezombie
+    case tallfirenutzombie
+    case kirovzombie
+    case zombieladderhead
+    case superjackboxzombie
+    case jalapenozombie
+    case zombiehead
+    case cherrynutzombie
+    case cherryshooterzombie
+    case doorzombie
+    case ultimategargantuar
+    case zombiearm
+    case drowngargantuar
+    case goldbungizombie
+    case zombiefootballhead
+    case zombiepogohead
+    case superpogozombie
+    case randomzombie
+    case ultimatelegionzombie
+    case impking
+    case ultimatejackboxzombie
+    case pogozombie
+    case jackboxzombie
+    case blackelephantzombie
+    case blacktrainzombie
+    case superpenguinzombie
+    case ultimatefootballzombie
+    case armedgargantuar
+    case petimp
+    case drownzombie
+    case iceclawzombie
+    case dolphingatlingzombie
+    case drownpultzombie
+    case superdancepolzombie
+    case snowzombie
+    case zombiediggerarm
+    case wallnutzombie
+    case snownormalzombie
+    case zombiejackboxarm
+    case redzombieloonnut
+    case cherrypaperzombie
+    case levatationzombie
+    case gatlingpeazombie
+    case superladderzombie
+    case machinespiderzombie
+    case peashooterzombie
+    case jackboxjumpzombie
+    case zombieglove
+    case zombiedolphinriderhead
+    case peazombie
+    case dolphinpeazombie
+    case ultimategoldgargantuar
+    case irongargantuar
+    case jacksonzombie
+    case silverzombie
+    case obsidianimpzombie
+    case horsezombie
+    case cherrycatapultzombie
+    case polfootballzombie
+    case quickjacksonzombie
+    case gatlingfootballzombie
+    case hypnojalapenozombie
+    case zombieduck
+    case bucketzombie
+    case ultimateimpking
+    case randomgargantuar
+    case randompluszombie
+    case ladderzombie
+    case snowconezombie
+    case bedrocksnowzombie
+    case qingzombie
+    case driverzombie
+    case spiderzombie
+    case ultimateswordzombie
+    case redgargantuar
+    case squalourzombie
+    case zombiepogo
+    case ironredgargantuar
+    case polzombie
+    case zombieyetihead
+    case projectilezombie
+    case supercherryzombie
+    case zombiepolevaulterhead
+    case pickaxezombie
+    case ultiwatergargantuar
+    case penguinzombie
+    case snorklezombie
+    case conezombie
+    case zombie
+    case bungizombie
+    case tallnutfootballzombie
+    case newyearzombie
+    case blackjackboxzombie
+    case protalzombie
+    case polevaulterzombie
+    case cherrypeazombie
+    case legionzombie
+    case doomzombie
+    case greengargantuar
+    case ultimatepaperzombie
+    case ultimatesnowzombie
+    case supersunnutzombie
+    case zombieendoflame
+    case minerzombie
+    case zombiedriver
+    case snowmonsterzombie
+    case legionsniperzombie
+    case moneyzombies
+    case yellowgargantuar
+    case elitepaperzombie
+    case redirongargantuar
+    case paperzombie
+    case catapultzombie
+    case chickenimp
+    case zombiediggerhead
+    case zombiefliter
+    case goldzombie
+    case supercherryshooterzombie
+    case goldgargantuar
+    case hypnojalapenopickaxezombie
+    case bucketzombieduck
+    case obsidiantallnutzombie
+    case zombieimphead
+    case zombieloonnut
+    case tallicenutzombie
+    case footballzombie
+    case ultimatekirovzombie
+    case elephantzombie
+    case submarinezombie
+    case ultimatemachinenutzombie
+    case ironconezombie
+    case zombieboss
+    case zombiedancerhead
+    case snowgatlingpeazombie
+    case conezombieduck
+    case bucketnutzombie
+    case snowbucketzombie
+    case waterjackboxjumpzombie
+    case supergargantuar
+    case gargantuar
+    case zombienotesmall
+    case diamondrandomzombie
+    case petgargantuar
+    case machinenutzombie
+    case dancepolzombie
 
     var textureName: String {
-        switch self {
-        case .sunPea: return "sunpea"
-        case .iceShooter: return "snowpea"
-        case .sunNut: return "sunnut"
-        case .peaNut: return "peanut"
-        case .iceNut: return "icenut"
-        case .gatlingPea: return "gatlingpea"
-        case .bigChomper: return "bigchomper"
-        case .allPeater: return "allpeater"
-        case .winterMelon: return "wintermelon"
-        case .fumePea: return "fumepea"
-        case .firePea: return "firepea"
-        case .chomperPea: return "chomperpea"
-        case .squashBomb: return "squashbomb"
-        }
+        return self.rawValue
     }
     var hp: Int {
-        switch self {
-        case .sunNut, .peaNut, .iceNut: return 8000
-        default: return 600
-        }
-    }
-
-    static func fuse(_ a: PlantType, _ b: PlantType) -> FusionType? {
-        let pair: Set<PlantType> = [a, b]
-        if pair == [.sunflower, .peashooter] { return .sunPea }
-        if pair == [.peashooter, .snowpea] { return .iceShooter }
-        if pair == [.sunflower, .wallnut] { return .sunNut }
-        if pair == [.peashooter, .wallnut] { return .peaNut }
-        if pair == [.snowpea, .wallnut] { return .iceNut }
-        if pair == [.cherrybomb, .peashooter] { return .gatlingPea }
-        if pair == [.chomper, .wallnut] { return .bigChomper }
-        if pair == [.repeater, .snowpea] { return .allPeater }
-        if pair == [.melonpult, .snowpea] { return .winterMelon }
-        if pair == [.fumeshroom, .peashooter] { return .fumePea }
-        if pair == [.torchwood, .peashooter] { return .firePea }
-        if pair == [.chomper, .peashooter] { return .chomperPea }
-        if pair == [.squash, .cherrybomb] { return .squashBomb }
-        return nil
-    }
-}
-
-enum ZombieType {
-    case basic, cone, bucket, flag, football
-    var textureName: String {
-        switch self {
-        case .basic: return "zombie"
-        case .cone: return "conezombie"
-        case .bucket: return "bucketzombie"
-        case .flag: return "flagzombie"
-        case .football: return "footballzombie"
-        }
-    }
-    var hp: Int {
-        switch self {
-        case .basic: return 200
-        case .cone: return 560
-        case .bucket: return 1300
-        case .flag: return 200
-        case .football: return 1600
-        }
+        if self.rawValue.contains("bucket") { return 1300 }
+        if self.rawValue.contains("cone") { return 560 }
+        if self.rawValue.contains("gargantuar") { return 3000 }
+        if self.rawValue.contains("football") { return 1600 }
+        return 200
     }
     var speed: CGFloat {
-        switch self {
-        case .basic: return 15
-        case .cone: return 16
-        case .bucket: return 14
-        case .flag: return 22
-        case .football: return 28
+        if self.rawValue.contains("football") { return 28 }
+        if self.rawValue.contains("flag") { return 22 }
+        return 15
+    }
+}
+
+// We will simplify FusionType to just be a helper that returns a PlantType instead, 
+// because all plants and fusions are now in PlantType.
+class FusionManager {
+    static func fuse(_ a: PlantType, _ b: PlantType) -> PlantType? {
+        // A simple fusion matcher based on names
+        // e.g. "Cabbage" + "Blover" -> "CabbageBlover"
+        let name1 = a.rawValue
+        let name2 = b.rawValue
+        
+        // Let's try combining their prefixes
+        // In PvZFusion, usually it's just Name1Name2, but we don't have perfect capitalization in rawValue.
+        // We will just do a linear scan (inefficient but works for 1000 items)
+        let combined = name1 + name2
+        let combined2 = name2 + name1
+        
+        for p in PlantType.allCases {
+            let pr = p.rawValue
+            // Check if both parts are in the target string
+            // Very basic heuristic
+            if pr.contains(name1) && pr.contains(name2) && pr.count <= combined.count + 4 {
+                return p
+            }
         }
+        return nil
     }
 }
 
 // MARK: - Game Entities
 
 class PlantEntity {
-    var type: PlantType?
-    var fusion: FusionType?
+    var type: PlantType!
+    
     var hp: Int
     var row: Int
     var col: Int
@@ -149,28 +1222,28 @@ class PlantEntity {
         self.col = col
         self.node = node
     }
-    init(fusion: FusionType, row: Int, col: Int, node: SKNode) {
-        self.fusion = fusion
+    init(fusion: PlantType, row: Int, col: Int, node: SKNode) {
+        self.type = fusion
         self.hp = fusion.hp
         self.row = row
         self.col = col
         self.node = node
     }
     var canShoot: Bool {
-        if let f = fusion { return [.sunPea, .iceShooter, .peaNut, .gatlingPea, .allPeater, .winterMelon, .fumePea, .firePea, .chomperPea].contains(f) }
+        let f = type { return [.sunPea, .iceShooter, .peaNut, .gatlingPea, .allPeater, .winterMelon, .fumePea, .firePea, .chomperPea].contains(f) }
         return type == .peashooter || type == .snowpea || type == .repeater || type == .threepeater || type == .fumeshroom || type == .melonpult || type == .cabbagepult || type == .puffshroom
     }
     var shootsIce: Bool {
-        if let f = fusion { return f == .iceShooter || f == .iceNut || f == .winterMelon }
+        let f = type { return f == .iceShooter || f == .iceNut || f == .winterMelon }
         return type == .snowpea
     }
     var producesSun: Bool {
-        if let f = fusion { return f == .sunPea || f == .sunNut }
+        let f = type { return f == .sunPea || f == .sunNut }
         return type == .sunflower || type == .sunshroom
     }
     var shootInterval: TimeInterval {
-        if fusion == .gatlingPea { return 0.4 }
-        if type == .repeater || fusion == .allPeater { return 0.8 }
+        if type == .gatlingPea { return 0.4 }
+        if type == .repeater || type == .allPeater { return 0.8 }
         return 1.4
     }
 }
@@ -453,7 +1526,7 @@ class GameScene: SKScene {
 
     func placePlant(_ type: PlantType, row: Int, col: Int) {
         if let existing = plants[row][col] {
-            if let existType = existing.type, let fusionResult = FusionType.fuse(existType, type) {
+            if let existType = existing.type, let fusionResult = FusionManager.fuse(existType, type) {
                 sun -= type.cost
                 existing.node.removeFromParent()
                 spawnPlantNode(texture: fusionResult.textureName, row: row, col: col, isFusion: true)
@@ -752,12 +1825,12 @@ class GameScene: SKScene {
             return
         }
         
-        let count = (plant.fusion == .gatlingPea) ? 4 : ((plant.type == .repeater || plant.fusion == .allPeater) ? 2 : 1)
+        let count = (plant.type == .gatlingPea) ? 4 : ((plant.type == .repeater || plant.type == .allPeater) ? 2 : 1)
         for i in 0..<count {
             run(SKAction.sequence([
                 SKAction.wait(forDuration: Double(i) * 0.15),
                 SKAction.run { [weak self] in
-                    self?.spawnProjectile(row: plant.row, startPos: plant.node.position, isIce: plant.shootsIce, damage: (plant.fusion == .gatlingPea ? 30 : 25))
+                    self?.spawnProjectile(row: plant.row, startPos: plant.node.position, isIce: plant.shootsIce, damage: (plant.type == .gatlingPea ? 30 : 25))
                 }
             ]))
         }

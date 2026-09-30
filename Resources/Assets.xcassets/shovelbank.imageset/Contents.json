@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "fileshovelbank" : "shovelbank.png",
+      "filename" : "shovelbank.png",
       "scale" : "1x"
     }
   ],

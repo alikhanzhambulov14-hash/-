@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filecherrybomb" : "cherrybomb.png",
+      "filename" : "cherrybomb.png",
       "scale" : "1x"
     }
   ],
