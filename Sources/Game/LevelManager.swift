@@ -21,21 +21,20 @@ class LevelManager {
         .sunflower,  // Unlocked after Level 1 (for Level 2)
         .cherrybomb, // Unlocked after Level 2 (for Level 3)
         .wallnut,    // Unlocked after Level 3
-        .potatomine, // Level 5
-        .snowpea,    // Level 6
-        .chomper,    // Level 7
-        .repeater,   // Level 8
-        .puffshroom, // Level 9 (Night)
-        .sunshroom,
-        .fumeshroom,
-        .squash,
-        .threepeater,
-        .jalapeno,
-        .tallnut,
-        .melonpult,
-        .cabbagepult,
-        .wintermelon,
-        .torchwood
+        .potatomine, // Level 4
+        .snowpea,    // Level 5
+        .chomper,    // Level 6
+        .repeater,   // Level 7
+        .puffshroom, // Level 8 (Night)
+        .sunshroom,  // Level 9
+        .fumeshroom, // Level 10
+        .squash,     // Level 11
+        .threepeater,// Level 12
+        .jalapeno,   // Level 13
+        .tallnut,    // Level 14
+        .melonpult,  // Level 15
+        .cabbagepult,// Level 16
+        .torchwood   // Level 17
     ]
     
     func getAvailablePlants() -> [PlantType] {

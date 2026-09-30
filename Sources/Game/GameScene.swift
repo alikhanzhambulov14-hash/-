@@ -5,21 +5,10 @@ import SpriteKit
 enum PlantType: String, CaseIterable {
     case sunflower, peashooter, wallnut, snowpea, cherrybomb
     case potatomine, chomper, puffshroom, torchwood, tallnut, squash, repeater
+    case sunshroom, fumeshroom, threepeater, jalapeno, melonpult, cabbagepult
+
     var textureName: String {
-        switch self {
-        case .sunflower: return "sunflower"
-        case .peashooter: return "peashooter"
-        case .wallnut: return "wallnut"
-        case .snowpea: return "snowpea"
-        case .cherrybomb: return "cherrybomb"
-        case .potatomine: return "potatomine"
-        case .chomper: return "chomper"
-        case .puffshroom: return "puffshroom"
-        case .torchwood: return "torchwood"
-        case .tallnut: return "tallnut"
-        case .squash: return "squash"
-        case .repeater: return "repeater"
-        }
+        return self.rawValue
     }
     var cost: Int {
         switch self {
@@ -35,6 +24,12 @@ enum PlantType: String, CaseIterable {
         case .tallnut: return 125
         case .squash: return 50
         case .repeater: return 200
+        case .sunshroom: return 25
+        case .fumeshroom: return 75
+        case .threepeater: return 325
+        case .jalapeno: return 125
+        case .melonpult: return 300
+        case .cabbagepult: return 100
         }
     }
     var hp: Int {
@@ -56,6 +51,10 @@ enum FusionType: String {
     case bigChomper   // chomper + chomper (or wallnut)
     case allPeater    // repeater + snowpea + peashooter
     case winterMelon  // melon + snowpea
+    case fumePea      // fumeshroom + peashooter
+    case firePea      // torchwood + peashooter
+    case chomperPea   // chomper + peashooter
+    case squashBomb   // squash + cherrybomb
 
     var textureName: String {
         switch self {
@@ -68,6 +67,10 @@ enum FusionType: String {
         case .bigChomper: return "bigchomper"
         case .allPeater: return "allpeater"
         case .winterMelon: return "wintermelon"
+        case .fumePea: return "fumepea"
+        case .firePea: return "firepea"
+        case .chomperPea: return "chomperpea"
+        case .squashBomb: return "squashbomb"
         }
     }
     var hp: Int {
@@ -87,25 +90,42 @@ enum FusionType: String {
         if pair == [.cherrybomb, .peashooter] { return .gatlingPea }
         if pair == [.chomper, .wallnut] { return .bigChomper }
         if pair == [.repeater, .snowpea] { return .allPeater }
+        if pair == [.melonpult, .snowpea] { return .winterMelon }
+        if pair == [.fumeshroom, .peashooter] { return .fumePea }
+        if pair == [.torchwood, .peashooter] { return .firePea }
+        if pair == [.chomper, .peashooter] { return .chomperPea }
+        if pair == [.squash, .cherrybomb] { return .squashBomb }
         return nil
     }
 }
 
 enum ZombieType {
-    case basic, cone, bucket
-    var textureName: String { return "zombie" } // we only have 1 zombie texture copied so far
+    case basic, cone, bucket, flag, football
+    var textureName: String {
+        switch self {
+        case .basic: return "zombie"
+        case .cone: return "conezombie"
+        case .bucket: return "bucketzombie"
+        case .flag: return "flagzombie"
+        case .football: return "footballzombie"
+        }
+    }
     var hp: Int {
         switch self {
         case .basic: return 200
         case .cone: return 560
         case .bucket: return 1300
+        case .flag: return 200
+        case .football: return 1600
         }
     }
     var speed: CGFloat {
         switch self {
         case .basic: return 15
-        case .cone: return 18
-        case .bucket: return 15
+        case .cone: return 16
+        case .bucket: return 14
+        case .flag: return 22
+        case .football: return 28
         }
     }
 }
@@ -137,20 +157,21 @@ class PlantEntity {
         self.node = node
     }
     var canShoot: Bool {
-        if let f = fusion { return [.sunPea, .iceShooter, .peaNut, .gatlingPea].contains(f) }
-        return type == .peashooter || type == .snowpea
+        if let f = fusion { return [.sunPea, .iceShooter, .peaNut, .gatlingPea, .allPeater, .winterMelon, .fumePea, .firePea, .chomperPea].contains(f) }
+        return type == .peashooter || type == .snowpea || type == .repeater || type == .threepeater || type == .fumeshroom || type == .melonpult || type == .cabbagepult || type == .puffshroom
     }
     var shootsIce: Bool {
-        if let f = fusion { return f == .iceShooter || f == .iceNut }
+        if let f = fusion { return f == .iceShooter || f == .iceNut || f == .winterMelon }
         return type == .snowpea
     }
     var producesSun: Bool {
         if let f = fusion { return f == .sunPea || f == .sunNut }
-        return type == .sunflower
+        return type == .sunflower || type == .sunshroom
     }
     var shootInterval: TimeInterval {
-        if fusion == .gatlingPea { return 0.5 }
-        return 1.5
+        if fusion == .gatlingPea { return 0.4 }
+        if type == .repeater || fusion == .allPeater { return 0.8 }
+        return 1.4
     }
 }
 
@@ -480,6 +501,15 @@ class GameScene: SKScene {
             return
         }
 
+        if type == .jalapeno {
+            sun -= type.cost
+            jalapenoBurn(row: row)
+            selectedPlant = nil
+            selectionIndicator?.removeFromParent()
+            updateSun()
+            return
+        }
+
         sun -= type.cost
         let node = spawnPlantNode(texture: type.textureName, row: row, col: col, isFusion: false)
         plants[row][col] = PlantEntity(type: type, row: row, col: col, node: node)
@@ -487,6 +517,25 @@ class GameScene: SKScene {
         selectedPlant = nil
         selectionIndicator?.removeFromParent()
         updateSun()
+    }
+
+    func jalapenoBurn(row: Int) {
+        let y = gridPos(row: row, col: 0).y
+        let fire = SKShapeNode(rectOf: CGSize(width: size.width, height: cellH))
+        fire.fillColor = SKColor.orange.withAlphaComponent(0.8)
+        fire.strokeColor = .red
+        fire.position = CGPoint(x: size.width / 2, y: y)
+        fire.zPosition = 60
+        addChild(fire)
+        fire.run(SKAction.sequence([
+            SKAction.fadeOut(withDuration: 0.6),
+            SKAction.removeFromParent()
+        ]))
+
+        for z in zombies where z.row == row {
+            z.hp = 0
+            z.isDead = true
+        }
     }
 
     func spawnPlantNode(texture: String, row: Int, col: Int, isFusion: Bool) -> SKNode {
@@ -569,7 +618,21 @@ class GameScene: SKScene {
 
     func spawnZombie() {
         let row = Int.random(in: 0..<rows)
-        let sprite = SKSpriteNode(imageNamed: "zombie")
+        let roll = Double.random(in: 0...1)
+        let type: ZombieType
+        if roll < 0.40 {
+            type = .basic
+        } else if roll < 0.68 {
+            type = .cone
+        } else if roll < 0.85 {
+            type = .bucket
+        } else if roll < 0.94 {
+            type = .football
+        } else {
+            type = .flag
+        }
+
+        let sprite = SKSpriteNode(imageNamed: type.textureName)
         sprite.position = CGPoint(x: size.width + 50, y: gridPos(row: row, col: 0).y)
         sprite.zPosition = 15
         if sprite.texture == nil {
@@ -579,7 +642,7 @@ class GameScene: SKScene {
             sprite.setScale(0.6)
         }
         addChild(sprite)
-        zombies.append(ZombieEntity(type: .basic, row: row, node: sprite))
+        zombies.append(ZombieEntity(type: type, row: row, node: sprite))
     }
 
     override func update(_ currentTime: TimeInterval) {
@@ -733,15 +796,34 @@ class GameScene: SKScene {
     }
 
     func shootPea(from plant: PlantEntity) {
+        if plant.type == .threepeater {
+            for r in [plant.row - 1, plant.row, plant.row + 1] where r >= 0 && r < rows {
+                spawnProjectile(row: r, startPos: plant.node.position, isIce: plant.shootsIce, damage: 25)
+            }
+            return
+        }
+        
+        let count = (plant.fusion == .gatlingPea) ? 4 : ((plant.type == .repeater || plant.fusion == .allPeater) ? 2 : 1)
+        for i in 0..<count {
+            run(SKAction.sequence([
+                SKAction.wait(forDuration: Double(i) * 0.15),
+                SKAction.run { [weak self] in
+                    self?.spawnProjectile(row: plant.row, startPos: plant.node.position, isIce: plant.shootsIce, damage: (plant.fusion == .gatlingPea ? 30 : 25))
+                }
+            ]))
+        }
+    }
+
+    func spawnProjectile(row: Int, startPos: CGPoint, isIce: Bool, damage: Int) {
         let node = SKSpriteNode(imageNamed: "bullet_pea")
-        node.position = CGPoint(x: plant.node.position.x + 20, y: plant.node.position.y)
+        node.position = CGPoint(x: startPos.x + 20, y: gridPos(row: row, col: 0).y)
         node.zPosition = 12
         if node.texture == nil {
-            node.color = plant.shootsIce ? .cyan : .green
+            node.color = isIce ? .cyan : .green
             node.size = CGSize(width: 15, height: 15)
         }
         addChild(node)
-        projectiles.append(Projectile(node: node, row: plant.row, isIce: plant.shootsIce, damage: plant.fusion == .gatlingPea ? 20 : 25))
+        projectiles.append(Projectile(node: node, row: row, isIce: isIce, damage: damage))
     }
 
     func spawnSun(at pos: CGPoint) {
