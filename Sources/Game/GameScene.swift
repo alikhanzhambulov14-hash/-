@@ -3,6 +3,7 @@ import SpriteKit
 // MARK: - Data Models
 
 enum PlantType: String, CaseIterable {
+
     // Base plants & Fusions combined for simplicity
     case pudding
     case icelotus
@@ -315,7 +316,6 @@ enum PlantType: String, CaseIterable {
     case portalcorn
     case cherrysupergatling
     case doomcabbage
-    case spikerock
     case diamondpotatonut
     case emeraldumbrella
     case hypnoshroom
@@ -718,7 +718,7 @@ enum PlantType: String, CaseIterable {
     case ultimatehugenut
     case scaredyhypno
     case redsplat
-    case super
+    case `super`
     case quickjackson
     case ultimatemeloncannon
     case cherrytorch
@@ -991,9 +991,24 @@ enum PlantType: String, CaseIterable {
         if self.rawValue.contains("tallnut") { return 8000 }
         return 300
     }
+    case snowpea
+    case repeater
+    case puffshroom
+    case iceShooter
+    case sunPea
+    case peaNut
+    case gatlingPea
+    case allPeater
+    case winterMelon
+    case fumePea
+    case firePea
+    case chomperPea
+    case iceNut
+    case sunNut
 }
 
 enum ZombieType: String, CaseIterable {
+
     case jalasquashzombie
     case flagzombie
     case boatimp
@@ -1174,6 +1189,11 @@ enum ZombieType: String, CaseIterable {
         if self.rawValue.contains("flag") { return 22 }
         return 15
     }
+    case basic
+    case cone
+    case bucket
+    case football
+    case flag
 }
 
 // We will simplify FusionType to just be a helper that returns a PlantType instead, 
@@ -1224,10 +1244,11 @@ class PlantEntity {
         
         self.node = node
         let env = LevelManager.shared.getCurrentLevelData().environment
-        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
+        if type.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
             self.isAsleep = true
-            self.node.alpha = 0.5 // visual representation of sleep
+            self.node.alpha = 0.5
         }
+
 
     }
     init(fusion: PlantType, row: Int, col: Int, node: SKNode) {
@@ -1237,23 +1258,19 @@ class PlantEntity {
         self.col = col
         
         self.node = node
-        let env = LevelManager.shared.getCurrentLevelData().environment
-        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
-            self.isAsleep = true
-            self.node.alpha = 0.5 // visual representation of sleep
-        }
+
 
     }
     var canShoot: Bool {
-        let f = type { return [.sunPea, .iceShooter, .peaNut, .gatlingPea, .allPeater, .winterMelon, .fumePea, .firePea, .chomperPea].contains(f) }
+        if [.sunPea, .iceShooter, .peaNut, .gatlingPea, .allPeater, .winterMelon, .fumePea, .firePea, .chomperPea].contains(type) { return true }
         return type == .peashooter || type == .snowpea || type == .repeater || type == .threepeater || type == .fumeshroom || type == .melonpult || type == .cabbagepult || type == .puffshroom
     }
     var shootsIce: Bool {
-        let f = type { return f == .iceShooter || f == .iceNut || f == .winterMelon }
+        if type == .iceShooter || type == .iceNut || type == .winterMelon { return true }
         return type == .snowpea
     }
     var producesSun: Bool {
-        let f = type { return f == .sunPea || f == .sunNut }
+        if type == .sunPea || type == .sunNut { return true }
         return type == .sunflower || type == .sunshroom
     }
     var shootInterval: TimeInterval {
@@ -1278,11 +1295,7 @@ class ZombieEntity {
         self.row = row
         
         self.node = node
-        let env = LevelManager.shared.getCurrentLevelData().environment
-        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
-            self.isAsleep = true
-            self.node.alpha = 0.5 // visual representation of sleep
-        }
+
 
         self.speed = type.speed
     }
@@ -1298,11 +1311,7 @@ class Projectile {
     init(node: SKNode, row: Int, isIce: Bool, damage: Int = 20) {
         
         self.node = node
-        let env = LevelManager.shared.getCurrentLevelData().environment
-        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
-            self.isAsleep = true
-            self.node.alpha = 0.5 // visual representation of sleep
-        }
+
 
         self.row = row
         self.isIce = isIce
@@ -1318,11 +1327,7 @@ class SunDrop {
     init(node: SKNode, targetY: CGFloat) {
         
         self.node = node
-        let env = LevelManager.shared.getCurrentLevelData().environment
-        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
-            self.isAsleep = true
-            self.node.alpha = 0.5 // visual representation of sleep
-        }
+
 
         self.targetY = targetY
     }
@@ -1338,11 +1343,7 @@ class MowerEntity {
         self.row = row
         
         self.node = node
-        let env = LevelManager.shared.getCurrentLevelData().environment
-        if fusion.rawValue.contains("shroom") && (env == .day || env == .pool || env == .roof) {
-            self.isAsleep = true
-            self.node.alpha = 0.5 // visual representation of sleep
-        }
+
 
     }
 }
@@ -1771,15 +1772,15 @@ class GameScene: SKScene {
         let roll = Double.random(in: 0...1)
         let type: ZombieType
         if roll < 0.40 {
-            type = .basic
+            type = .zombie
         } else if roll < 0.68 {
-            type = .cone
+            type = .conezombie
         } else if roll < 0.85 {
-            type = .bucket
+            type = .bucketzombie
         } else if roll < 0.94 {
-            type = .football
+            type = .footballzombie
         } else {
-            type = .flag
+            type = .flagzombie
         }
 
         let sprite = SKSpriteNode(imageNamed: type.textureName)
