@@ -22,10 +22,8 @@ targets:
     platform: iOS
     sources:
       - Sources
+    resources:
       - path: Resources/Assets.xcassets
-        type: folder
-      - path: Resources/Info.plist
-        type: file
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.pvzfusion.game
