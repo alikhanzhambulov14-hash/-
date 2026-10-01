@@ -7,209 +7,198 @@ class SeedChooserViewController: UIViewController {
 
     var levelIndex: Int = LevelManager.shared.currentLevelIndex
 
-    var availableSeeds: [PlantKind] = []
-    var selectedSeeds:  [PlantKind] = []
+    var availableSeeds: [Plant] = []
+    var selectedSeeds:  [Plant] = []
 
     let maxSelection = 8
 
-    var topBar:      UIView!
-    var bottomBar:   UIScrollView!
+    var seedBankView: UIView!
+    var chooserPanelView: UIScrollView!
     var startButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 0.05, green: 0.15, blue: 0.05, alpha: 1)
+        view.backgroundColor = .black
         availableSeeds = LevelManager.shared.availablePlants(forLevel: levelIndex)
         setupUI()
     }
 
     func setupUI() {
-        // Background image
+        // Background image to simulate the game screen in the background
         let bg = UIImageView(frame: view.bounds)
         bg.image = UIImage(named: "lawn")
         bg.contentMode = .scaleAspectFill
-        bg.alpha = 0.3
+        bg.alpha = 0.5
         view.addSubview(bg)
 
-        // Title
-        let titleLabel = UILabel()
-        titleLabel.text = "🌱 Выбери растения"
-        titleLabel.textColor = .white
-        titleLabel.font = UIFont.systemFont(ofSize: 26, weight: .black)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(titleLabel)
-
-        // Level label
-        let levelLabel = UILabel()
-        levelLabel.text = "Уровень \(levelIndex)"
-        levelLabel.textColor = UIColor.yellow
-        levelLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        levelLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(levelLabel)
-
-        // Start button
+        // Seed Bank (Top Left)
+        seedBankView = UIView()
+        seedBankView.backgroundColor = UIColor(red: 0.53, green: 0.33, blue: 0.15, alpha: 1) // Wood color
+        seedBankView.layer.borderColor = UIColor(red: 0.3, green: 0.15, blue: 0.05, alpha: 1).cgColor
+        seedBankView.layer.borderWidth = 4
+        seedBankView.layer.cornerRadius = 8
+        seedBankView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(seedBankView)
+        
+        // Start Button (Top Right next to seed bank)
         startButton = UIButton(type: .system)
-        startButton.setTitle("▶ ПОЕХАЛИ!", for: .normal)
-        startButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .black)
-        startButton.backgroundColor = UIColor(red: 0.1, green: 0.7, blue: 0.1, alpha: 1)
+        startButton.setTitle("LET'S ROCK!", for: .normal)
+        startButton.titleLabel?.font = UIFont.systemFont(ofSize: 22, weight: .black)
+        startButton.backgroundColor = UIColor(red: 0.1, green: 0.8, blue: 0.1, alpha: 1)
         startButton.setTitleColor(.white, for: .normal)
-        startButton.layer.cornerRadius = 20
+        startButton.layer.cornerRadius = 8
+        startButton.layer.borderColor = UIColor(red: 0.05, green: 0.4, blue: 0.05, alpha: 1).cgColor
+        startButton.layer.borderWidth = 3
         startButton.translatesAutoresizingMaskIntoConstraints = false
         startButton.addTarget(self, action: #selector(startGame), for: .touchUpInside)
         startButton.alpha = 0.5
         startButton.isEnabled = false
         view.addSubview(startButton)
 
-        // Selected tray
-        let topLabel = UILabel()
-        topLabel.text = "Выбрано (до \(maxSelection)):"
-        topLabel.textColor = UIColor(white: 0.8, alpha: 1)
-        topLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        topLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(topLabel)
+        // Chooser Panel (Bottom Left)
+        let panelContainer = UIView()
+        panelContainer.backgroundColor = UIColor(red: 0.72, green: 0.53, blue: 0.3, alpha: 1) // Dirt/Wood color
+        panelContainer.layer.borderColor = UIColor(red: 0.4, green: 0.25, blue: 0.1, alpha: 1).cgColor
+        panelContainer.layer.borderWidth = 6
+        panelContainer.layer.cornerRadius = 12
+        panelContainer.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(panelContainer)
 
-        topBar = UIView()
-        topBar.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        topBar.layer.cornerRadius = 8
-        topBar.layer.borderWidth = 1
-        topBar.layer.borderColor = UIColor.orange.withAlphaComponent(0.7).cgColor
-        topBar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(topBar)
+        let titleLabel = UILabel()
+        titleLabel.text = "Choose Your Seeds"
+        titleLabel.textColor = UIColor(white: 0.9, alpha: 1)
+        titleLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        titleLabel.textAlignment = .center
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        panelContainer.addSubview(titleLabel)
 
-        // Available scroll view
-        let availLabel = UILabel()
-        availLabel.text = "Доступные:"
-        availLabel.textColor = UIColor(white: 0.8, alpha: 1)
-        availLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        availLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(availLabel)
+        chooserPanelView = UIScrollView()
+        chooserPanelView.translatesAutoresizingMaskIntoConstraints = false
+        panelContainer.addSubview(chooserPanelView)
 
-        bottomBar = UIScrollView()
-        bottomBar.backgroundColor = UIColor(white: 0, alpha: 0.4)
-        bottomBar.layer.cornerRadius = 8
-        bottomBar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(bottomBar)
-
-        // Layout
+        // Layout Constraints
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-
-            levelLabel.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            levelLabel.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 16),
-
-            startButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            startButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            startButton.widthAnchor.constraint(equalToConstant: 160),
-            startButton.heightAnchor.constraint(equalToConstant: 44),
-
-            topLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
-            topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-
-            topBar.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 4),
-            topBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
-            topBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
-            topBar.heightAnchor.constraint(equalToConstant: 90),
-
-            availLabel.topAnchor.constraint(equalTo: topBar.bottomAnchor, constant: 8),
-            availLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-
-            bottomBar.topAnchor.constraint(equalTo: availLabel.bottomAnchor, constant: 4),
-            bottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
-            bottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
-            bottomBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+            // Seed Bank
+            seedBankView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            seedBankView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            seedBankView.heightAnchor.constraint(equalToConstant: 90),
+            
+            // Start Button
+            startButton.leadingAnchor.constraint(equalTo: seedBankView.trailingAnchor, constant: 16),
+            startButton.centerYAnchor.constraint(equalTo: seedBankView.centerYAnchor),
+            startButton.widthAnchor.constraint(equalToConstant: 180),
+            startButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            // Panel Container
+            panelContainer.topAnchor.constraint(equalTo: seedBankView.bottomAnchor, constant: 10),
+            panelContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            panelContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            panelContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            
+            // Panel Title
+            titleLabel.topAnchor.constraint(equalTo: panelContainer.topAnchor, constant: 10),
+            titleLabel.centerXAnchor.constraint(equalTo: panelContainer.centerXAnchor),
+            
+            // Chooser ScrollView
+            chooserPanelView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+            chooserPanelView.leadingAnchor.constraint(equalTo: panelContainer.leadingAnchor, constant: 10),
+            chooserPanelView.trailingAnchor.constraint(equalTo: panelContainer.trailingAnchor, constant: -10),
+            chooserPanelView.bottomAnchor.constraint(equalTo: panelContainer.bottomAnchor, constant: -10),
         ])
 
-        renderBottomBar()
-        renderTopBar()
+        renderSeedBank()
+        renderChooserPanel()
     }
 
-    func renderBottomBar() {
-        bottomBar.subviews.forEach { $0.removeFromSuperview() }
-        let cardW: CGFloat = 70
-        let cardH: CGFloat = 82
-        let spacing: CGFloat = 8
-        let cols = 12
+    func renderSeedBank() {
+        seedBankView.subviews.forEach { $0.removeFromSuperview() }
+        let cardW: CGFloat = 56
+        let cardH: CGFloat = 76
+        let spacing: CGFloat = 6
+        
+        let totalW = CGFloat(maxSelection) * (cardW + spacing) + spacing
+        seedBankView.widthAnchor.constraint(equalToConstant: totalW).isActive = true
 
+        for i in 0..<maxSelection {
+            let x = spacing + CGFloat(i) * (cardW + spacing)
+            
+            let slot = UIView(frame: CGRect(x: x, y: 7, width: cardW, height: cardH))
+            slot.backgroundColor = UIColor(white: 0, alpha: 0.3)
+            slot.layer.cornerRadius = 4
+            seedBankView.addSubview(slot)
+            
+            if i < selectedSeeds.count {
+                let pk = selectedSeeds[i]
+                let btn = createPlantCard(pk: pk, frame: slot.bounds, isSelected: false)
+                btn.tag = i
+                btn.addTarget(self, action: #selector(selectedSeedTapped(_:)), for: .touchUpInside)
+                slot.addSubview(btn)
+            }
+        }
+        
+        startButton.isEnabled = !selectedSeeds.isEmpty
+        startButton.alpha = selectedSeeds.isEmpty ? 0.5 : 1.0
+    }
+
+    func renderChooserPanel() {
+        chooserPanelView.subviews.forEach { $0.removeFromSuperview() }
+        let cardW: CGFloat = 56
+        let cardH: CGFloat = 76
+        let spacing: CGFloat = 8
+        
+        let availableWidth = view.bounds.width - 40
+        let cols = max(8, Int(availableWidth / (cardW + spacing)))
+        
         for (i, pk) in availableSeeds.enumerated() {
             let col = i % cols
             let row = i / cols
             let x = CGFloat(col) * (cardW + spacing) + spacing
             let y = CGFloat(row) * (cardH + spacing) + spacing
-
-            let btn = UIButton(frame: CGRect(x: x, y: y, width: cardW, height: cardH))
+            
+            let isPicked = selectedSeeds.contains(pk)
+            let btn = createPlantCard(pk: pk, frame: CGRect(x: x, y: y, width: cardW, height: cardH), isSelected: isPicked)
             btn.tag = i
-            btn.layer.cornerRadius = 8
-            btn.clipsToBounds = true
-            btn.backgroundColor = UIColor(white: 0.15, alpha: 1)
-            btn.layer.borderWidth = selectedSeeds.contains(pk) ? 2 : 1
-            btn.layer.borderColor = selectedSeeds.contains(pk) ? UIColor.green.cgColor : UIColor(white: 0.5, alpha: 1).cgColor
-
-            if let img = UIImage(named: pk.rawValue) {
-                btn.setImage(img, for: .normal)
-                btn.imageView?.contentMode = .scaleAspectFit
-                btn.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 24, right: 4)
-            } else {
-                btn.backgroundColor = UIColor(red: 0.2, green: 0.5, blue: 0.2, alpha: 1)
-                btn.setTitle(String(pk.rawValue.prefix(6)), for: .normal)
-                btn.titleLabel?.font = UIFont.systemFont(ofSize: 9, weight: .bold)
-                btn.titleLabel?.adjustsFontSizeToFitWidth = true
-            }
-
-            let costLbl = UILabel(frame: CGRect(x: 0, y: cardH - 22, width: cardW, height: 20))
-            costLbl.text = "☀\(pk.cost)"
-            costLbl.textColor = .yellow
-            costLbl.font = UIFont.systemFont(ofSize: 11, weight: .bold)
-            costLbl.textAlignment = .center
-            btn.addSubview(costLbl)
-
-            btn.alpha = selectedSeeds.contains(pk) ? 0.45 : 1.0
             btn.addTarget(self, action: #selector(seedTapped(_:)), for: .touchUpInside)
-            bottomBar.addSubview(btn)
+            chooserPanelView.addSubview(btn)
         }
-
+        
         let totalRows = (availableSeeds.count + cols - 1) / cols
-        bottomBar.contentSize = CGSize(width: bottomBar.bounds.width, height: CGFloat(totalRows) * (cardH + spacing) + spacing)
+        let contentHeight = CGFloat(totalRows) * (cardH + spacing) + spacing
+        chooserPanelView.contentSize = CGSize(width: chooserPanelView.bounds.width, height: contentHeight)
     }
-
-    func renderTopBar() {
-        topBar.subviews.forEach { $0.removeFromSuperview() }
-        let cardW: CGFloat = 70
-        let spacing: CGFloat = 8
-
-        for (i, pk) in selectedSeeds.enumerated() {
-            let x = CGFloat(i) * (cardW + spacing) + spacing
-            let btn = UIButton(frame: CGRect(x: x, y: 6, width: cardW, height: 78))
-            btn.tag = i
-            btn.layer.cornerRadius = 8
-            btn.clipsToBounds = true
-            btn.backgroundColor = UIColor(white: 0.15, alpha: 1)
-            btn.layer.borderWidth = 2
-            btn.layer.borderColor = UIColor.green.cgColor
-
-            if let img = UIImage(named: pk.rawValue) {
-                btn.setImage(img, for: .normal)
-                btn.imageView?.contentMode = .scaleAspectFit
-                btn.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 22, right: 4)
-            } else {
-                btn.backgroundColor = UIColor(red: 0.1, green: 0.4, blue: 0.1, alpha: 1)
-                btn.setTitle(String(pk.rawValue.prefix(6)), for: .normal)
-                btn.titleLabel?.font = UIFont.systemFont(ofSize: 9)
-            }
-
-            let costLbl = UILabel(frame: CGRect(x: 0, y: 58, width: cardW, height: 18))
-            costLbl.text = "☀\(pk.cost)"
-            costLbl.textColor = .yellow
-            costLbl.font = UIFont.systemFont(ofSize: 11, weight: .bold)
-            costLbl.textAlignment = .center
-            btn.addSubview(costLbl)
-
-            btn.addTarget(self, action: #selector(selectedSeedTapped(_:)), for: .touchUpInside)
-            topBar.addSubview(btn)
+    
+    func createPlantCard(pk: Plant, frame: CGRect, isSelected: Bool) -> UIButton {
+        let btn = UIButton(frame: frame)
+        btn.layer.cornerRadius = 4
+        btn.clipsToBounds = true
+        btn.backgroundColor = isSelected ? UIColor(white: 0.3, alpha: 1) : UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1)
+        btn.layer.borderWidth = 1
+        btn.layer.borderColor = UIColor.black.cgColor
+        
+        if let img = UIImage(named: pk.rawValue) {
+            btn.setImage(img, for: .normal)
+            btn.imageView?.contentMode = .scaleAspectFit
+            btn.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 20, right: 4)
+            if isSelected { btn.imageView?.alpha = 0.5 }
+        } else {
+            btn.backgroundColor = isSelected ? UIColor(white: 0.2, alpha: 1) : UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1)
+            btn.setTitle(String(pk.rawValue.prefix(6)), for: .normal)
+            btn.titleLabel?.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+            btn.setTitleColor(isSelected ? .gray : .white, for: .normal)
         }
-
-        startButton.isEnabled = !selectedSeeds.isEmpty
-        startButton.alpha     = selectedSeeds.isEmpty ? 0.5 : 1.0
+        
+        let costBg = UIView(frame: CGRect(x: 0, y: frame.height - 18, width: frame.width, height: 18))
+        costBg.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        btn.addSubview(costBg)
+        
+        let costLbl = UILabel(frame: costBg.bounds)
+        costLbl.text = "\(pk.cost)"
+        costLbl.textColor = isSelected ? .gray : .white
+        costLbl.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        costLbl.textAlignment = .center
+        costBg.addSubview(costLbl)
+        
+        return btn
     }
 
     @objc func seedTapped(_ sender: UIButton) {
@@ -217,15 +206,14 @@ class SeedChooserViewController: UIViewController {
         if selectedSeeds.contains(pk) { return }
         if selectedSeeds.count >= maxSelection { return }
         selectedSeeds.append(pk)
-        renderTopBar()
-        renderBottomBar()
+        renderSeedBank()
+        renderChooserPanel()
     }
 
     @objc func selectedSeedTapped(_ sender: UIButton) {
-        let pk = selectedSeeds[sender.tag]
-        selectedSeeds.removeAll { $0 == pk }
-        renderTopBar()
-        renderBottomBar()
+        selectedSeeds.remove(at: sender.tag)
+        renderSeedBank()
+        renderChooserPanel()
     }
 
     @objc func startGame() {
@@ -233,6 +221,7 @@ class SeedChooserViewController: UIViewController {
         gameVC.modalPresentationStyle = .fullScreen
         gameVC.modalTransitionStyle   = .crossDissolve
         gameVC.levelIndex             = levelIndex
+        gameVC.selectedSeeds          = selectedSeeds
         present(gameVC, animated: true)
     }
 }

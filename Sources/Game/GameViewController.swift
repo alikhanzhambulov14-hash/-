@@ -6,6 +6,7 @@ class GameViewController: UIViewController {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .landscape }
 
     var levelIndex: Int = LevelManager.shared.currentLevelIndex
+    var selectedSeeds: [Plant] = []
 
     private var skView: SKView!
     private var scene:  GameScene!
@@ -30,6 +31,7 @@ class GameViewController: UIViewController {
         scene.currentLevel = levelIndex
         scene.totalWaves   = LevelManager.shared.wavesForLevel(levelIndex)
         scene.sun          = LevelManager.shared.startingSunForLevel(levelIndex)
+        scene.selectedSeedsDeck = selectedSeeds
         skView.presentScene(scene)
 
         setupPauseButton()

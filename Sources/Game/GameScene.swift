@@ -584,6 +584,7 @@ func makeExplosion(at pos: CGPoint, radius: CGFloat, color: UIColor = .orange) -
 class GameScene: SKScene {
 
     // ── State ──────────────────────────────────────────────────────────────────
+    var selectedSeedsDeck: [Plant] = []
     var sun: Int = 50 { didSet { sunLabel?.text = "☀️ \(sun)" } }
     var score: Int = 0
     var currentLevel: Int  = 1
@@ -694,14 +695,14 @@ class GameScene: SKScene {
     }
 
     func buildSeedBar() {
-        let defaultDeck: [Plant] = [
+        let deckToUse = selectedSeedsDeck.isEmpty ? [
             .sunflower, .peashooter, .wallnut, .cherrybomb, .snowpea,
             .repeater, .chomper, .potatomine, .squash, .threepeater,
             .tallnut, .jalapeno, .fumeshroom, .magnetshroom
-        ]
+        ] : selectedSeedsDeck
 
         let cardW: CGFloat = 64, cardH: CGFloat = Grid.seedBarH - 8
-        let totalW = CGFloat(defaultDeck.count) * (cardW + 4) + 8
+        let totalW = CGFloat(deckToUse.count) * (cardW + 4) + 8
         let bar = SKShapeNode(rectOf: CGSize(width: totalW, height: Grid.seedBarH), cornerRadius: 10)
         bar.fillColor   = SKColor(red: 0.08, green: 0.28, blue: 0.08, alpha: 0.88)
         bar.strokeColor = SKColor(white: 1, alpha: 0.12)
@@ -711,7 +712,7 @@ class GameScene: SKScene {
         addChild(bar)
         seedBar = bar
 
-        for (i, p) in defaultDeck.enumerated() {
+        for (i, p) in deckToUse.enumerated() {
             let x = -totalW/2 + cardW/2 + 4 + CGFloat(i) * (cardW + 4)
             let card = SKShapeNode(rectOf: CGSize(width: cardW, height: cardH), cornerRadius: 6)
             card.fillColor   = SKColor(white: 0.05, alpha: 0.8)
